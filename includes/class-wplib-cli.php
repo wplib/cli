@@ -183,14 +183,16 @@ class WPLib_CLI {
 
 		do {
 
-			if ( is_file( $app_file = $this->get_app_dir( 'wplib-app.php' ) ) ) {
+			$theme = $this->_json;
+			$app = $theme->app;
+
+			if ( is_file( $app_file = $this->get_app_dir( "{$theme->theme_slug}.php" ) ) ) {
 				break;
 			}
 
 			$app_dir = dirname( $app_file );
 
 			global $app;
-			$app = $this->_json->app;
 			ob_start();
 			require( dirname( __DIR__ ) . '/templates/app.php' );
 			$source = ob_get_clean();
