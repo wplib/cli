@@ -64,7 +64,7 @@ class WPLib_CLI {
 					break;
 				}
 				if ( empty( $post_type->plural ) ) {
-					$post_type->plural .= 's';
+					$post_type->plural = "{$post_type->singular}s";
 				}
 				if ( empty( $post_type->menu_icon ) ) {
 					$post_type->menu_icon = '';
@@ -102,17 +102,20 @@ class WPLib_CLI {
 
 		$theme = $this->_json;
 
-		$post_type->singular_slug                = strtolower( $post_type->singular );
+		$post_type->singular_slug                = str_replace( ' ', '-', strtolower( $post_type->singular ) );
 		$post_type->singular_suffix              = str_replace( ' ', '_', $post_type->singular );
 		$post_type->plural_suffix                = str_replace( ' ', '_', $post_type->plural );
 		$post_type->singular_class_name          = "{$theme->prefix}_{$post_type->singular_suffix}";
 		$post_type->plural_class_name            = "{$theme->prefix}_{$post_type->plural_suffix}";
-		$post_type->plural_slug                  = isset( $post_type->plural ) ? strtolower( $post_type->plural ) : strtolower( $post_type->singular ) . 's';
-		$post_type->module_dir                   = $this->get_app_dir( 'modules' ) . "/{$post_type->singular_slug}";
-		$post_type->filenames['post-types']      = "{$post_type->module_dir}/{$post_type->plural_slug}";
-		$post_type->filenames['post-type']       = "{$post_type->module_dir}/includes/{$post_type->singular_slug}";
-		$post_type->filenames['post-type-model'] = "{$post_type->filenames['post-type']}-model";
-		$post_type->filenames['post-type-view']  = "{$post_type->filenames['post-type']}-view";
+		$post_type->plural_slug                  = ! empty( $post_type->plural )
+			? str_replace( ' ', '-', strtolower( $post_type->plural ) )
+			: "{$post_type->singular_slug}s";
+		$post_type->module_dir                   = $this->get_app_dir( 'modules' ) . "/post-type-{$post_type->plural_slug}";
+		$post_type->includes_dir                 = "{$post_type->module_dir}/includes/";
+		$post_type->filenames['post-types']      = "{$post_type->module_dir}/post-type-{$post_type->plural_slug}";
+		$post_type->filenames['post-type']       = "{$post_type->includes_dir}/class-{$post_type->singular_slug}";
+		$post_type->filenames['post-type-model'] = "{$post_type->includes_dir}/class-{$post_type->singular_slug}-model";
+		$post_type->filenames['post-type-view']  = "{$post_type->includes_dir}/class-{$post_type->singular_slug}-view";
 
 		if ( ! preg_match( '#^' . preg_quote( $theme->short_prefix ) . '_#', $post_type->post_type ) ) {
 
@@ -130,7 +133,7 @@ class WPLib_CLI {
 		));
 
 		foreach( $post_type->filenames as $file_type => $filename ) {
-
+			$filename = str_replace( ' ', '-', $filename );
 			ob_start();
 			echo "<?php\n";
 			require( dirname( __DIR__ ) . "/templates/{$file_type}.php" );
@@ -186,13 +189,12 @@ class WPLib_CLI {
 			$theme = $this->_json;
 			$app = $theme->app;
 
-			if ( is_file( $app_file = $this->get_app_dir( "{$theme->theme_slug}.php" ) ) ) {
+			if ( is_file( $app_file = $this->get_app_dir( "{$theme->theme_slug}-app.php" ) ) ) {
 				break;
 			}
 
 			$app_dir = dirname( $app_file );
 
-			global $app;
 			ob_start();
 			require( dirname( __DIR__ ) . '/templates/app.php' );
 			$source = ob_get_clean();
@@ -217,6 +219,8 @@ class WPLib_CLI {
 
 	}
 	function get_themes_dir( $path = false ) {
+
+		$path = trim( $path, '/' );
 
 		return getcwd() . '/' . trim( $this->_json->themes_path, '/' ) . "/{$this->_json->theme_slug}/{$path}";
 
