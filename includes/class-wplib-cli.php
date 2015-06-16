@@ -1,59 +1,96 @@
 <?php
 
+/**
+ * Class WPLib_CLI
+ */
 class WPLib_CLI {
 
-	private $_json;
+	private $_data;
 
-	function load_json( $json_file ) {
+	/**
+	 * @param array $args
+	 */
+	function execute( $args ) {
 
-		$this->_json = @json_decode( file_get_contents( $json_file ) );
+		echo "\n";
+
+		do {
+
+			if ( ! is_file( $json_file = getcwd() . '/wplib.json' ) ) {
+
+				echo "No wplib.json file.";
+				break;
+
+			}
+
+			$data = \Typed_Config\Loader::load( 'wplib', new \WPLib_CLI\Theme(), $json_file );
+
+			$this->set_data( $data );
+
+			if ( 0 == count( $args ) ) {
+
+				echo "Action parameter required.";
+				break;
+
+			}
+
+			switch ( $args[1] ) {
+
+				case 'generate':
+
+					$this->generate( $data );
+					break;
+
+				case 'show-data':
+					$data->strip_meta( '__id__' );
+					ob_start();
+					print_r( $data );
+					$output = ob_get_clean();
+					echo $output;
+					break;
+
+				case 'show-hooks':
+					$hooks = $data->get_hooks();
+					ob_start();
+					echo "\nHOOKS AVAIALBLE (value==1 if called):\n";
+					print_r( $hooks );
+					$output = ob_get_clean();
+					echo $output;
+					break;
+
+			}
+
+		} while (false);
+
+		echo "\n\n";
+
+	}
+
+	function set_data( $data ) {
+
+		$this->_data = $data;
+
+	}
+
+	function load_data( $json_file ) {
+
+		$this->_data = @json_decode( file_get_contents( $json_file ) );
 
 		$fail = false;
 		do {
 
-			if ( empty( $this->_json ) || ! is_object( $this->_json ) ) {
-				echo $fail = "wplib.json invalid.";
-				break;
+			if ( empty( $this->_data->app->path ) ) {
+				$this->_data->app->path = $this->_data->theme_path;
+			}
+			if ( empty( $this->_data->app->prefix ) ) {
+				$this->_data->app->prefix = $this->_data->prefix;
 			}
 
-			if ( empty( $this->_json->theme_slug ) ) {
-				echo $fail = 'No Theme Slug defined in wplib.json.';
-				break;
-			}
-			if ( empty( $this->_json->text_domain ) ) {
-				$this->text_domain = $this->_json->theme_slug;
-			}
-			if ( empty( $this->_json->prefix ) ) {
-				echo $fail = 'No Prefix defined in wplib.json.';
-				break;
-			}
-			if ( empty( $this->_json->short_prefix ) ) {
-				echo $fail = 'No Short Prefix defined in wplib.json.';
-				break;
-			}
-			if ( empty( $this->_json->themes_path ) ) {
-				$this->_json->themes_path = $this->default_themes_path();
-			}
-
-			if ( empty( $this->_json->theme_path ) ) {
-				$this->_json->theme_path = $this->get_themes_dir( $this->_json->theme_slug );
-			}
-
-			if ( empty( $this->_json->app ) ) {
-				$this->_json->app = new stdClass();
-			}
-			if ( empty( $this->_json->app->path ) ) {
-				$this->_json->app->path = $this->_json->theme_path;
-			}
-			if ( empty( $this->_json->app->prefix ) ) {
-				$this->_json->app->prefix = $this->_json->prefix;
-			}
-
-			if ( empty( $this->_json->app->post_types ) && ! is_array( $this->_json->app->post_types ) ) {
+			if ( empty( $this->_data->app->post_types ) && ! is_array( $this->_data->app->post_types ) ) {
 				echo $fail = 'App Post Types are not an array.';
 				break;
 			}
-			foreach( $this->_json->app->post_types as $index => $post_type ) {
+			foreach( $this->_data->app->post_types as $index => $post_type ) {
 
 				if ( empty( $post_type->post_type ) ) {
 					echo $fail = 'Must specify a \'post_type\' property for App Post Type #.' . ( $index + 1 );
@@ -91,40 +128,13 @@ class WPLib_CLI {
 
 	}
 
-	function generate( $args ) {
-		$this->generate_theme();
-		$this->generate_app();
-		$this->generate_post_types();
+	function generate( $data ) {
+		$this->generate_theme( $data );
 		echo "Generated.";
 	}
 
 	function generate_post_type( $post_type ) {
 
-		$theme = $this->_json;
-
-		$post_type->singular_slug                = str_replace( ' ', '-', strtolower( $post_type->singular ) );
-		$post_type->singular_suffix              = str_replace( ' ', '_', $post_type->singular );
-		$post_type->plural_suffix                = str_replace( ' ', '_', $post_type->plural );
-		$post_type->singular_class_name          = "{$theme->prefix}_{$post_type->singular_suffix}";
-		$post_type->plural_class_name            = "{$theme->prefix}_{$post_type->plural_suffix}";
-		$post_type->plural_slug                  = ! empty( $post_type->plural )
-			? str_replace( ' ', '-', strtolower( $post_type->plural ) )
-			: "{$post_type->singular_slug}s";
-		$post_type->module_dir                   = $this->get_app_dir( 'modules' ) . "/post-type-{$post_type->plural_slug}";
-		$post_type->includes_dir                 = "{$post_type->module_dir}/includes/";
-		$post_type->filenames['post-types']      = "{$post_type->module_dir}/post-type-{$post_type->plural_slug}";
-		$post_type->filenames['post-type']       = "{$post_type->includes_dir}/class-{$post_type->singular_slug}";
-		$post_type->filenames['post-type-model'] = "{$post_type->includes_dir}/class-{$post_type->singular_slug}-model";
-		$post_type->filenames['post-type-view']  = "{$post_type->includes_dir}/class-{$post_type->singular_slug}-view";
-
-		if ( ! preg_match( '#^' . preg_quote( $theme->short_prefix ) . '_#', $post_type->post_type ) ) {
-
-			$post_type->post_type = "{$theme->short_prefix}_{$post_type->post_type}";
-
-		}
-
-
-		$theme = $this->_json;
 		$this->_mkdirs(array(
 
 			$post_type->module_dir,
@@ -132,20 +142,30 @@ class WPLib_CLI {
 
 		));
 
-		foreach( $post_type->filenames as $file_type => $filename ) {
-			$filename = str_replace( ' ', '-', $filename );
+		foreach( $post_type->filenames->properties() as $file_type => $filename ) {
+
+
 			ob_start();
 			echo "<?php\n";
-			require( dirname( __DIR__ ) . "/templates/{$file_type}.php" );
-			file_put_contents( "{$filename}.php", $source = ob_get_clean() );
+			require( $this->get_template_filepath( $file_type ) );
+			$source = ob_get_clean();
+
+			file_put_contents( "{$filename}", $source );
 
 		}
 
 	}
 
-	function generate_post_types() {
+	function get_template_filepath( $file_type ) {
 
-		foreach( $this->_json->app->post_types as $post_type ) {
+		$file_type = preg_replace( '#^(.*)_file#', '$1', $file_type );
+		return dirname( __DIR__ ) . "/templates/post-type-{$file_type}.php";
+
+	}
+
+	function generate_post_types( $app ) {
+
+		foreach( $app->post_types as $post_type ) {
 
 			$this->generate_post_type( $post_type );
 
@@ -154,81 +174,56 @@ class WPLib_CLI {
 	}
 
 
-	function generate_theme() {
+	function generate_theme( $theme ) {
 
-		do {
+		if ( ! is_dir( $theme->theme_dir ) ) {
 
-			if ( is_file( $theme_file = $this->get_themes_dir( 'wplib-theme.php' ) ) ) {
-				break;
-			}
-			$theme_dir = dirname( $theme_file );
+			mkdir( $theme->theme_dir, 0777, true );
 
-			global $theme;
-			$theme = $this->_json;
-			ob_start();
-			require( dirname( __DIR__ ) . '/templates/theme.php' );
-			$source = ob_get_clean();
+		}
 
-			if ( ! is_dir( $theme_dir ) ) {
+		ob_start();
 
-				mkdir( $theme_dir, 0777, true );
+		require( dirname( __DIR__ ) . '/templates/theme.php' );
 
-			}
+		$source = ob_get_clean();
 
-			file_put_contents( $theme_file, $source );
+		file_put_contents( $theme->theme_file, $source );
 
-
-		} while (false);
+		$this->generate_app( $theme->app );
 
 	}
 
-	function generate_app() {
+	function generate_app( $app ) {
 
-		do {
+		if ( ! is_dir( $app->app_dir ) ) {
 
-			$theme = $this->_json;
-			$app = $theme->app;
+			mkdir( $app->app_dir, 0777, true );
 
-			if ( is_file( $app_file = $this->get_app_dir( "{$theme->theme_slug}-app.php" ) ) ) {
-				break;
-			}
+		}
 
-			$app_dir = dirname( $app_file );
+		ob_start();
 
-			ob_start();
-			require( dirname( __DIR__ ) . '/templates/app.php' );
-			$source = ob_get_clean();
+		require( dirname( __DIR__ ) . '/templates/app.php' );
 
-			$this->_mkdirs(array(
+		$source = ob_get_clean();
 
-				$app_dir,
-				"{$app_dir}/assets",
-				"{$app_dir}/modules",
+		$this->_mkdirs(array(
 
-			));
+			$app->app_dir,
+			"{$app->app_dir}/assets",
+			"{$app->app_dir}/assets/images",
+			"{$app->app_dir}/assets/css",
+			"{$app->app_dir}/assets/js",
+			"{$app->app_dir}/modules",
 
-			file_put_contents( $app_file, $source );
+		));
 
-		} while (false);
+		file_put_contents( $app->app_file, $source );
 
-	}
+		$this->generate_post_types( $app );
 
-	function get_app_dir( $path = false ) {
 
-		return $this->get_themes_dir( "/wplib-app/{$path}" );
-
-	}
-	function get_themes_dir( $path = false ) {
-
-		$path = trim( $path, '/' );
-
-		return getcwd() . '/' . trim( $this->_json->themes_path, '/' ) . "/{$this->_json->theme_slug}/{$path}";
-
-	}
-
-	function default_themes_path() {
-
-		return "wp-content/themes/{$this->_json->theme_slug}";
 
 	}
 
@@ -246,4 +241,5 @@ class WPLib_CLI {
 
 		}
 	}
+
 }
