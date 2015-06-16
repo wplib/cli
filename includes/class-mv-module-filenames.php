@@ -1,104 +1,28 @@
 <?php
 
-namespace WPLib_CLI;
+namespace WPLib_CLI {
 
-use \Typed_Config;
-
-/**
- * Class MV_Module_Filenames
- *
- * @package WPLib_CLI
- */
-class MV_Module_Filenames extends Typed_Config\Data {
+	use JSON_Loader;
 
 	/**
-	 * @var string
+	 * Class Rewrite
+	 *
+	 * @see     http://codex.wordpress.org/Function_Reference/register_post_type#rewrite
+	 *
+	 * @package WPLib_CLI
 	 */
-	var $module_file;
+	class MV_Module_Filenames extends JSON_Loader\Data_Object {
 
-	/**
-	 * @var string
-	 */
-	var $item_file;
+		var $namespace = 'WPLib_CLI';
 
-	/**
-	 * @var string
-	 */
-	var $model_file;
+		var $schema = array(
 
-	/**
-	 * @var string
-	 */
-	var $view_file;
+			'module_file' => 'type=string',
+			'item_file'   => 'type=string',
+			'model_file'  => 'type=string',
+			'view_file'   => 'type=string',
 
-	/**
-	 * @return Post_Type
-	 */
-	function post_type() {
-
-		return $this->__parent__;
-
-	}
-	/**
-	 * @return Theme
-	 */
-	function theme() {
-
-		return $this->post_type()->parent()->parent();
-
-	}
-
-	function pre_filter_module_file_value( $module_file ) {
-
-		if ( is_null( $module_file ) ) {
-
-			$module_file = $this->post_type()->module_file;
-
-		}
-
-		return $module_file;
-	}
-
-	function pre_filter_item_file_value( $item_file ) {
-
-		if ( is_null( $item_file ) ) {
-
-			$item_file = $this->_get_instance_file( '.php' );
-
-		}
-
-		return $item_file;
-	}
-
-	function pre_filter_model_file_value( $model_file ) {
-
-		if ( is_null( $model_file ) ) {
-
-			$model_file = $this->_get_instance_file( '-model.php' );
-
-		}
-
-		return $model_file;
-	}
-
-	function pre_filter_view_file_value( $view_file ) {
-
-		if ( is_null( $view_file ) ) {
-
-			$view_file = $this->_get_instance_file( '-view.php' );
-
-		}
-
-		return $view_file;
-	}
-
-	private function _get_instance_file( $suffix ) {
-
-	    $post_type = $this->post_type();
-
-		return str_replace( ' ', '-', "{$post_type->includes_dir}/class-{$post_type->singular_slug}{$suffix}" );
-
+		);
 	}
 
 }
-

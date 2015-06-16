@@ -5,7 +5,7 @@
  */
 class WPLib_CLI {
 
-	private $_data;
+	private $_theme;
 
 	/**
 	 * @param array $args
@@ -23,9 +23,9 @@ class WPLib_CLI {
 
 			}
 
-			$data = \Typed_Config\Loader::load( 'wplib', new \WPLib_CLI\Theme(), $json_file );
+			$theme = \JSON_Loader\Loader::load( '\WPLib_CLI\Theme', $json_file );
 
-			$this->set_data( $data );
+			$this->set_theme( $theme );
 
 			if ( 0 == count( $args ) ) {
 
@@ -42,18 +42,8 @@ class WPLib_CLI {
 					break;
 
 				case 'show-data':
-					$data->strip_meta( '__id__' );
 					ob_start();
 					print_r( $data );
-					$output = ob_get_clean();
-					echo $output;
-					break;
-
-				case 'show-hooks':
-					$hooks = $data->get_hooks();
-					ob_start();
-					echo "\nHOOKS AVAIALBLE (value==1 if called):\n";
-					print_r( $hooks );
 					$output = ob_get_clean();
 					echo $output;
 					break;
@@ -66,31 +56,31 @@ class WPLib_CLI {
 
 	}
 
-	function set_data( $data ) {
+	function set_theme( $theme ) {
 
-		$this->_data = $data;
+		$this->_theme = $theme;
 
 	}
 
 	function load_data( $json_file ) {
 
-		$this->_data = @json_decode( file_get_contents( $json_file ) );
+		$this->_theme = @json_decode( file_get_contents( $json_file ) );
 
 		$fail = false;
 		do {
 
-			if ( empty( $this->_data->app->path ) ) {
-				$this->_data->app->path = $this->_data->theme_path;
+			if ( empty( $this->_theme->app->path ) ) {
+				$this->_theme->app->path = $this->_theme->theme_path;
 			}
-			if ( empty( $this->_data->app->prefix ) ) {
-				$this->_data->app->prefix = $this->_data->prefix;
+			if ( empty( $this->_theme->app->prefix ) ) {
+				$this->_theme->app->prefix = $this->_theme->prefix;
 			}
 
-			if ( empty( $this->_data->app->post_types ) && ! is_array( $this->_data->app->post_types ) ) {
+			if ( empty( $this->_theme->app->post_types ) && ! is_array( $this->_theme->app->post_types ) ) {
 				echo $fail = 'App Post Types are not an array.';
 				break;
 			}
-			foreach( $this->_data->app->post_types as $index => $post_type ) {
+			foreach( $this->_theme->app->post_types as $index => $post_type ) {
 
 				if ( empty( $post_type->post_type ) ) {
 					echo $fail = 'Must specify a \'post_type\' property for App Post Type #.' . ( $index + 1 );
@@ -128,8 +118,8 @@ class WPLib_CLI {
 
 	}
 
-	function generate( $data ) {
-		$this->generate_theme( $data );
+	function generate( $theme ) {
+		$this->generate_theme( $theme );
 		echo "Generated.";
 	}
 

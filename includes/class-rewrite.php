@@ -1,41 +1,29 @@
 <?php
 
-namespace WPLib_CLI;
+namespace WPLib_CLI {
 
-use \Typed_Config;
-
-/**
- * Class Rewrite
- *
- * @see http://codex.wordpress.org/Function_Reference/register_post_type#rewrite
- *
- * @package WPLib_CLI
- */
-class Rewrite extends Typed_Config\Data {
+	use JSON_Loader;
 
 	/**
-	 * @var string
+	 * Class Rewrite
+	 *
+	 * @see http://codex.wordpress.org/Function_Reference/register_post_type#rewrite
+	 *
+	 * @package WPLib_CLI
 	 */
-	var $slug;
+	class Rewrite extends JSON_Loader\Data_Object {
 
-	/**
-	 * @var bool
-	 */
-	var $with_front;
+		var $namespace = 'WPLib_CLI';
 
-	/**
-	 * @var bool
-	 */
-	var $feeds;
+		var $schema = array(
 
-	/**
-	 * @var bool
-	 */
-	var $pages;
+			'slug'                 => 'type=string',
+			'with_front'           => 'type=boolean',
+			'feeds'                => 'type=boolean',
+			'pages'                => 'type=boolean',
+			'ep_mask'              => 'type=string',
 
-	/**
-	 * @var string
-	 */
-	var $ep_mask;
+		);
+	}
 
 }
