@@ -8,7 +8,7 @@ echo <<< TEXT
  *
  * @property {$post_type->singular_class_name}_Model $model
  * @property {$post_type->singular_class_name}_View $view
-
+ *
  * @mixin {$post_type->singular_class_name}_Model
  * @mixin {$post_type->singular_class_name}_View
  *

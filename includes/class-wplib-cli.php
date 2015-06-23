@@ -5,8 +5,6 @@
  */
 class WPLib_CLI {
 
-	private $_theme;
-
 	/**
 	 * @param array $args
 	 */
@@ -16,17 +14,6 @@ class WPLib_CLI {
 
 		do {
 
-			if ( ! is_file( $json_file = getcwd() . '/wplib.json' ) ) {
-
-				echo "No wplib.json file.";
-				break;
-
-			}
-
-			$theme = \JSON_Loader\Loader::load( '\WPLib_CLI\Theme', $json_file );
-
-			$this->set_theme( $theme );
-
 			if ( 0 == count( $args ) ) {
 
 				echo "Action parameter required.";
@@ -34,19 +21,29 @@ class WPLib_CLI {
 
 			}
 
-			switch ( $args[1] ) {
+			if ( ! is_file( $json_file = getcwd() . '/wplib.json' ) ) {
 
-				case 'generate':
+				echo "No wplib.json file.";
+				break;
 
-					$this->generate( $data );
-					break;
+			}
 
-				case 'show-data':
-					ob_start();
-					print_r( $data );
-					$output = ob_get_clean();
-					echo $output;
-					break;
+			$root = \JSON_Loader\Loader::load( '\WPLib_CLI\Root', $json_file );
+
+			if ( \JSON_Loader\Validator::validate( $root ) ) {
+
+				switch ( $args[1] ) {
+
+					case 'generate':
+
+						\JSON_Loader\Generator::generate( $root );
+						break;
+
+					case 'show-data':
+						\JSON_Loader\Output::show_data( $root );
+						break;
+
+				}
 
 			}
 
@@ -54,182 +51,6 @@ class WPLib_CLI {
 
 		echo "\n\n";
 
-	}
-
-	function set_theme( $theme ) {
-
-		$this->_theme = $theme;
-
-	}
-
-	function load_data( $json_file ) {
-
-		$this->_theme = @json_decode( file_get_contents( $json_file ) );
-
-		$fail = false;
-		do {
-
-			if ( empty( $this->_theme->app->path ) ) {
-				$this->_theme->app->path = $this->_theme->theme_path;
-			}
-			if ( empty( $this->_theme->app->prefix ) ) {
-				$this->_theme->app->prefix = $this->_theme->prefix;
-			}
-
-			if ( empty( $this->_theme->app->post_types ) && ! is_array( $this->_theme->app->post_types ) ) {
-				echo $fail = 'App Post Types are not an array.';
-				break;
-			}
-			foreach( $this->_theme->app->post_types as $index => $post_type ) {
-
-				if ( empty( $post_type->post_type ) ) {
-					echo $fail = 'Must specify a \'post_type\' property for App Post Type #.' . ( $index + 1 );
-					break;
-				}
-				if ( empty( $post_type->singular ) ) {
-					echo $fail = 'Must specify a \'Singular\' property for App Post Type {$post_type->post_type}';
-					break;
-				}
-				if ( empty( $post_type->plural ) ) {
-					$post_type->plural = "{$post_type->singular}s";
-				}
-				if ( empty( $post_type->menu_icon ) ) {
-					$post_type->menu_icon = '';
-				}
-				if ( empty( $post_type->menu_position ) ) {
-					$post_type->menu_position = '10';
-				}
-				if ( empty( $post_type->supports ) ) {
-					$post_type->supports = 'title,editor';
-				}
-				if ( is_string( $post_type->supports ) ) {
-					$post_type->supports = explode( ',', $post_type->supports );
-				}
-				if ( is_array( $post_type->supports ) ) {
-					$post_type->supports = implode( "','", $post_type->supports );
-					$post_type->supports = "array('{$post_type->supports}')";
-				}
-
-			}
-
-		} while (false);
-
-		return ! $fail;
-
-	}
-
-	function generate( $theme ) {
-		$this->generate_theme( $theme );
-		echo "Generated.";
-	}
-
-	function generate_post_type( $post_type ) {
-
-		$this->_mkdirs(array(
-
-			$post_type->module_dir,
-			"{$post_type->module_dir}/includes",
-
-		));
-
-		foreach( $post_type->filenames->properties() as $file_type => $filename ) {
-
-
-			ob_start();
-			echo "<?php\n";
-			require( $this->get_template_filepath( $file_type ) );
-			$source = ob_get_clean();
-
-			file_put_contents( "{$filename}", $source );
-
-		}
-
-	}
-
-	function get_template_filepath( $file_type ) {
-
-		$file_type = preg_replace( '#^(.*)_file#', '$1', $file_type );
-		return dirname( __DIR__ ) . "/templates/post-type-{$file_type}.php";
-
-	}
-
-	function generate_post_types( $app ) {
-
-		foreach( $app->post_types as $post_type ) {
-
-			$this->generate_post_type( $post_type );
-
-		}
-
-	}
-
-
-	function generate_theme( $theme ) {
-
-		if ( ! is_dir( $theme->theme_dir ) ) {
-
-			mkdir( $theme->theme_dir, 0777, true );
-
-		}
-
-		ob_start();
-
-		require( dirname( __DIR__ ) . '/templates/theme.php' );
-
-		$source = ob_get_clean();
-
-		file_put_contents( $theme->theme_file, $source );
-
-		$this->generate_app( $theme->app );
-
-	}
-
-	function generate_app( $app ) {
-
-		if ( ! is_dir( $app->app_dir ) ) {
-
-			mkdir( $app->app_dir, 0777, true );
-
-		}
-
-		ob_start();
-
-		require( dirname( __DIR__ ) . '/templates/app.php' );
-
-		$source = ob_get_clean();
-
-		$this->_mkdirs(array(
-
-			$app->app_dir,
-			"{$app->app_dir}/assets",
-			"{$app->app_dir}/assets/images",
-			"{$app->app_dir}/assets/css",
-			"{$app->app_dir}/assets/js",
-			"{$app->app_dir}/modules",
-
-		));
-
-		file_put_contents( $app->app_file, $source );
-
-		$this->generate_post_types( $app );
-
-
-
-	}
-
-	/**
-	 * @param $dirs
-	 */
-	private function _mkdirs( $dirs ) {
-		foreach ( $dirs as $dir ) {
-
-			if ( ! is_dir( $dir ) ) {
-
-				mkdir( $dir, 0777, true );
-
-			}
-
-		}
 	}
 
 }

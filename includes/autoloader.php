@@ -16,9 +16,29 @@ class Autoloader {
 
 		$class_name = preg_match( '#^(\\\\)?WPLib_CLI\\\\(.*)$#', $class_name, $match ) ? $match[2] : $class_name;
 
-		if ( is_file( $class_file = __DIR__ . strtolower( str_replace( '_', '-', "/class-{$class_name}.php" ) ) ) ) {
+		if ( preg_match( '#^[_a-zA-Z][_a-zA-Z0-9]*_Generator$#', $class_name ) ) {
 
-			require( $class_file );
+			$class_file = strtolower( str_replace( '_', '-', "/../generators/{$class_name}.php" ) );
+
+			if ( is_file( $file_to_load = realpath( __DIR__ . $class_file ) ) ) {
+
+				require( $file_to_load );
+
+			}
+
+		} else {
+
+			$class_file = strtolower( str_replace( '_', '-', "/class-{$class_name}.php" ) );
+
+			if ( is_file( $file_to_load = realpath( __DIR__ . "/../objects{$class_file}" ) ) ) {
+
+				require( $file_to_load );
+
+			} else if ( is_file( $file_to_load = __DIR__ . $class_file ) ) {
+
+				require( $file_to_load );
+
+			}
 
 		}
 
