@@ -49,7 +49,45 @@ class WPLib_CLI {
 
 		} while (false);
 
-		echo "\n\n";
+		echo "Generated.\n\n";
+
+	}
+
+	/**
+	 * @param \WPLib_CLI\Root $root
+	 * @param string $identifier
+	 * @return string
+	 */
+	static function get_prefixed_identifier( $root, $identifier ) {
+
+		/**
+		 * Convert all identifiers to using lowercase and underscores
+		 */
+		$identifier = str_replace( '-', '_', strtolower( $identifier ) );
+
+		$regex = '#^' . preg_quote( "{$root->short_prefix}_" ) . '#';
+
+		if ( ! preg_match( $regex, $identifier ) ) {
+			/**
+			 * If the post types are not prefixed with short post type, prefix them
+			 */
+			$identifier = "{$root->short_prefix}{$identifier}";
+
+		}
+
+		return $identifier;
+
+	}
+
+	/**
+	 * @param string|string[] $comma_string
+	 * @return array
+	 */
+	static function comma_string_to_array( $comma_string ) {
+
+		return is_string( $comma_string )
+			? array_map( 'trim', explode( ',', $comma_string ) )
+			: $comma_string;
 
 	}
 

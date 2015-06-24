@@ -8,8 +8,13 @@ namespace WPLib_CLI {
 
 		function register() {
 
-			$this->register_generator( 'theme', $this->object->theme, 'Theme_Generator' );
-			$this->register_generator( 'app', $this->object->app, 'App_Generator' );
+			$this->register_generator( 'theme', $this->object->theme, array(
+				'generator_class' => 'Theme_Generator',
+			));
+
+			$this->register_generator( 'app', $this->object->app, array(
+				'generator_class' => 'App_Generator',
+			));
 
 		}
 

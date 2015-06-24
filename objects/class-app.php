@@ -19,6 +19,19 @@ namespace WPLib_CLI {
 		const SLUG = 'app';
 
 
+		function app_dir( $app_dir ) {
+
+			return $app_dir ? $app_dir : "{$this->parent->theme->theme_dir}/wplib-app/{$this->parent->slug}";
+
+		}
+
+		function app_file( $app_file ) {
+
+			return $app_file ? $app_file : "{$this->app_dir}/{$this->parent->slug}-app.php";
+
+		}
+
+
 	}
 
 }

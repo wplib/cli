@@ -8,12 +8,7 @@ namespace WPLib_CLI {
 
 		function register() {
 
-			/**
-			 * @var App $app
-			 */
-			$app = $this->object;
-
-			$this->register_subdirs( array(
+			$this->register_dirs( array(
 
 				'{app->app_dir}',
 				'{app_dir}/modules',
@@ -24,9 +19,11 @@ namespace WPLib_CLI {
 
 			));
 
-			$this->register_output_file( '{theme->theme_dir}/wplib-app/{slug}-app.php' );
+			$this->register_output_file( '{app_dir}/{slug}-app.php' );
 
-			self::register_generator( 'post_type', $app->post_types );
+			self::register_generator( 'post_type', $this->object->post_types, array(
+				'property_name' => 'post_types'
+			));
 
 
 		}
