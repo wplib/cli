@@ -54,24 +54,50 @@ class WPLib_CLI {
 	}
 
 	/**
-	 * @param \WPLib_CLI\Root $root
 	 * @param string $identifier
+	 * @param string $short_prefix
 	 * @return string
 	 */
-	static function get_prefixed_identifier( $root, $identifier ) {
+	static function get_prefixed_identifier( $identifier, $short_prefix ) {
 
 		/**
 		 * Convert all identifiers to using lowercase and underscores
 		 */
-		$identifier = str_replace( '-', '_', strtolower( $identifier ) );
+		$identifier = \JSON_Loader::underscorify( strtolower( $identifier ) );
 
-		$regex = '#^' . preg_quote( "{$root->short_prefix}_" ) . '#';
+		$regex = '#^' . preg_quote( "{$short_prefix}_" ) . '#';
 
 		if ( ! preg_match( $regex, $identifier ) ) {
 			/**
-			 * If the post types are not prefixed with short post type, prefix them
+			 * If the post type was not prefixed with short prefix, prefix it.
 			 */
-			$identifier = "{$root->short_prefix}{$identifier}";
+			$identifier = "{$short_prefix}_{$identifier}";
+
+		}
+
+		return $identifier;
+
+	}
+
+	/**
+	 * @param string $identifier
+	 * @param string $short_prefix
+	 * @return string
+	 */
+	static function get_non_prefixed_identifier( $identifier, $short_prefix ) {
+
+		/**
+		 * Convert all identifiers to using lowercase and underscores
+		 */
+		$identifier = \JSON_Loader::underscorify( strtolower( $identifier ) );
+
+		$regex = '#^' . preg_quote( "{$short_prefix}_" ) . '(.*)$#';
+
+		if ( preg_match( $regex, $identifier, $match ) ) {
+			/**
+			 * If the post type was prefixed with short prefix, strip it.
+			 */
+			$identifier = $match[ 1 ];
 
 		}
 
@@ -91,4 +117,25 @@ class WPLib_CLI {
 
 	}
 
+	/**
+	 * @param string $filename
+	 * @return string
+	 */
+	static function get_template_filepath( $filename ) {
+
+		if ( is_dir( dirname( $filename ) ) && is_file( $filename ) ) {
+
+			$filepath = $filename;
+
+		} else {
+
+			$filename = trim( $filename, '/' );
+
+			$filepath = dirname( __DIR__ ) . "/templates/{$filename}";
+
+		}
+
+		return $filepath;
+
+	}
 }

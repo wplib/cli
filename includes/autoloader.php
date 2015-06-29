@@ -18,7 +18,7 @@ class Autoloader {
 
 		if ( preg_match( '#^[_a-zA-Z][_a-zA-Z0-9]*_Generator$#', $class_name ) ) {
 
-			$class_file = strtolower( str_replace( '_', '-', "/../generators/{$class_name}.php" ) );
+			$class_file = strtolower( \JSON_Loader::dashify( "/../generators/{$class_name}.php" ) );
 
 			if ( is_file( $file_to_load = realpath( __DIR__ . $class_file ) ) ) {
 
@@ -28,7 +28,7 @@ class Autoloader {
 
 		} else {
 
-			$class_file = strtolower( str_replace( '_', '-', "/class-{$class_name}.php" ) );
+			$class_file = strtolower( \JSON_Loader::dashify( "/class-{$class_name}.php" ) );
 
 			if ( is_file( $file_to_load = realpath( __DIR__ . "/../objects{$class_file}" ) ) ) {
 

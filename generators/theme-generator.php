@@ -8,7 +8,7 @@ namespace WPLib_CLI {
 
 		function register() {
 
-			$this->register_output_file( '{theme->theme_dir}/wplib-theme.php' );
+			$this->register_output_file( 'theme', '{theme->theme_dir}/wplib-theme.php' );
 
 		}
 

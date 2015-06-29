@@ -19,10 +19,10 @@ namespace WPLib_CLI {
 
 			));
 
-			$this->register_output_file( '{app_dir}/{slug}-app.php' );
+			$this->register_output_file( 'app', '{app_dir}/{slug}-app.php' );
 
-			self::register_generator( 'post_type', $this->object->post_types, array(
-				'property_name' => 'post_types'
+			$this->register_generator( 'post_types', $this->object->post_types, array(
+				'element_slug'  => 'post-type',
 			));
 
 

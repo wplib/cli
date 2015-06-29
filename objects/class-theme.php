@@ -20,7 +20,7 @@ namespace WPLib_CLI {
 				/**
 				 * @var Root $root
 				 */
-				$root = $this->parent;
+				$root = $this->__parent__;
 
 				/**
 				 * @todo getcwd() will need to change if we allow for running

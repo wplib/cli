@@ -15,7 +15,6 @@ namespace WPLib_CLI {
 	 * @property string $text_domain
 	 * @property App $app
 	 * @property Theme $theme
-	 *
 	 */
 	class Root extends JSON_Loader\Object {
 

@@ -2,6 +2,11 @@
 
 namespace WPLib_CLI {
 
+	/**
+	 * Class Root_Generator
+	 *
+	 * @package WPLib_CLI
+	 */
 	class Root_Generator extends \JSON_Loader\Generator {
 
 		const SLUG = 'root';

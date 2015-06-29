@@ -1,4 +1,11 @@
 <?php
+/**
+ * @var \WPLib_CLI\Post_Type $post_type
+ * @var \WPLib_CLI\Post_Type_Generator $generator
+ */
+
+$generated_args = $generator->generated_args();
+
 $labels = '$labels';
 
 echo <<< TEXT
@@ -17,12 +24,7 @@ class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
 		));
 
 		self::register_post_type( array(
-			'label'         => __( '{$post_type->plural}', 'wplib' ),
-			'labels'        => $labels,
-			'public'        => true,
-			'menu_icon'     => '{$post_type->menu_icon}',
-			'menu_position' => {$post_type->menu_position},
-			'supports'      => {$post_type->supports},
+			{$generated_args}
 		));
 
 	}
