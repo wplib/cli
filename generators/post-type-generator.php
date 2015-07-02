@@ -2,60 +2,75 @@
 
 namespace WPLib_CLI {
 
-	use \JSON_Loader\Generator;
-
+	use JSON_Loader\Util;
 	/**
 	 * Class Post_Type_Generator
 	 *
-	 * @property Post_Type $object
+	 * @property Object|Post_Type $object
+	 * @property string $singular_class_name
+	 * @property string $plural_class_name
 	 */
-	class Post_Type_Generator extends Generator {
+	class Post_Type_Generator extends Model_View_Generator {
 
-		const SLUG = 'post-type';
+		const SLUG = Post_Type::SLUG;
 
-		function register() {
-
-			$this->register_dirs( array(
-
-				'{module_dir}',
-				'{includes_dir}',
-
-			));
-
-			$this->register_output_file( 'post-type-module', '{module_file}' );
-			$this->register_output_file( 'post-type-item',   '{includes_dir}/class-{singular_slug}.php' );
-			$this->register_output_file( 'post-type-model',  '{includes_dir}/class-{singular_slug}-model.php' );
-			$this->register_output_file( 'post-type-view',   '{includes_dir}/class-{singular_slug}-view.php' );
-
-			$this->register_generator( 'post_type', $this->object );
-
-		}
+		const UNIQUE_ID = 'singular_slug';
 
 		/**
-		 * @return App
+		 * @todo Do we even need to register this?
 		 */
-		function app() {
+		function register() {
 
-		 	return $this->object->__parent__->app;
+			parent::register();
+
+			$this->initialize( $this->object, $this );
 
 		}
+
 
 		/**
 		 * @return string
 		 */
-		function generated_args() {
+		function class_name_base( $suffix ) {
 
-			$post_type = $this->object;
-
-			$args = $post_type->post_type_args();
-
-			$args = $post_type->filter_default_values( $args );
-
-			$args = $post_type->explode_args( $args );
-
-			return trim( $this->get_generated_args( $args ) );
+			return Util::underscorify( "{$this->root()->prefix}_{$suffix}" );
 
 		}
+
+		/**
+		 * @param bool|string $class_name
+		 *
+		 * @return string
+		 */
+		function singular_class_name( $class_name = false ) {
+
+			if ( ! $class_name ) {
+
+				$class_name = $this->class_name_base( $this->object->singular );
+
+			}
+
+			return $class_name;
+
+		}
+
+		/**
+		 * @param bool|string $class_name
+		 *
+		 * @return string
+		 */
+		function plural_class_name( $class_name = false ) {
+
+			if ( ! $class_name ) {
+
+				$class_name = $this->class_name_base( $this->object->plural );
+
+			}
+
+			return $class_name;
+
+		}
+
 
 	}
 

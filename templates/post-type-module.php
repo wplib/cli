@@ -1,18 +1,21 @@
 <?php
 /**
- * @var \WPLib_CLI\Post_Type $post_type
  * @var \WPLib_CLI\Post_Type_Generator $generator
+ * @var \WPLib_CLI\Post_Type $post_type
  */
 
-$generated_args = $generator->generated_args();
+$initializers = $generator->get_initializers();
 
 $labels = '$labels';
 
+$class_name = $generator->plural_class_name;
+
 echo <<< TEXT
+<?php
 /**
- * Class {$post_type->plural_class_name}
+ * Class {$class_name}
  */
-class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
+class {$class_name} extends WPLib_Post_Module_Base {
 
 	const POST_TYPE = '{$post_type->post_type}';
 
@@ -24,11 +27,15 @@ class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
 		));
 
 		self::register_post_type( array(
-			{$generated_args}
+			'post_type' => static::POST_TYPE,
+			'labels'    => $labels,
+			{$initializers}
 		));
+
+		[@include(hook-comments)]
 
 	}
 
 }
-{$post_type->plural_class_name}::on_load();
+{$class_name}::on_load();
 TEXT;

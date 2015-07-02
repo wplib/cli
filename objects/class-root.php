@@ -2,8 +2,6 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader;
-
 	/**
 	 * Class Root
 	 *
@@ -11,15 +9,14 @@ namespace WPLib_CLI {
 	 * @property string $prefix            { @required }
 	 * @property string $short_prefix      { @required }
 	 * @property string $slug              { @required }
-	 * @property string $themes_dir        { @required }
-	 * @property string $text_domain
+	 * @property string $root_dir          { @required }
+	 * @property string $text_domain       { @default $slug }  // TODO Make this @default value work
 	 * @property App $app
 	 * @property Theme $theme
 	 */
-	class Root extends JSON_Loader\Object {
+	class Root extends Object {
 
 		const SLUG = 'root';
-
 
 	}
 

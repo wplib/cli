@@ -3,6 +3,7 @@ $model = '$model';
 $view = '$view';
 
 echo <<< TEXT
+<?php
 /**
  * Class {$post_type->singular_class_name}
  *

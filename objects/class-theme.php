@@ -2,31 +2,50 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader;
+	use \JSON_Loader\Util;
 
 	/**
 	 * Class Theme
 	 *
 	 * @property string $theme_dir
 	 */
-	class Theme extends JSON_Loader\Object {
+	class Theme extends Object {
 
 		const SLUG = 'theme';
 
-		function theme_dir( $theme_dir ) {
+		/**
+		 * @param bool|string $theme_dir
+		 *
+		 * @return string
+		 */
+		function theme_dir( $theme_dir = false ) {
 
 			if ( ! $theme_dir ) {
 
 				/**
-				 * @var Root $root
+				 * @var Object|Theme $theme
 				 */
-				$root = $this->__parent__;
+				$theme = $this;
 
+				$state = Util::get_state( $theme );
+
+				$dir = $state->parent->root_dir;
+
+				if ( ! preg_match( '#^(~|/)$#', $dir[ 0 ] ) ) {
+
+					/**
+					 * Normalize directory format.
+					 * @todo Make work for Windows.
+					 */
+
+					$dir = "~/{$dir}";
+
+				}
 				/**
-				 * @todo getcwd() will need to change if we allow for running
-				 * @todo wplib-cli in other than the site root.
+				 * Replace leading '~/' with Current Working Directory
+				 * @todo Need to move logic to a root_dir() and set_root_dir() methods in \JSON_Loader\Util.
 				 */
-				$theme_dir = getcwd() . "/{$root->themes_dir}/{$root->slug}";
+				$theme_dir = preg_replace( '#^~/(.*)$#', getcwd() . '/$1', $dir );
 
 			}
 

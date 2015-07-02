@@ -2,13 +2,37 @@
 
 namespace WPLib_CLI {
 
-	class Theme_Generator extends \JSON_Loader\Generator {
+	/**
+	 * Class Theme_Generator
+	 *
+	 * @package WPLib_CLI
+	 *
+	 * @property $theme_dir
+	 * @property $theme_file
+	 */
+	class Theme_Generator extends Generator {
 
-		const SLUG = 'theme';
+		const SLUG = Theme::SLUG;
 
+		/**
+		 *
+		 */
 		function register() {
 
-			$this->register_output_file( 'theme', '{theme->theme_dir}/wplib-theme.php' );
+			parent::register();
+
+			$this->register_dirs( $this->theme_dir );
+
+			$this->register_output_file( self::SLUG, $this->theme_file() );
+
+		}
+
+		/**
+		 * @return string
+		 */
+		function theme_file() {
+
+			return "{$this->theme_dir}/wplib-theme.php";
 
 		}
 

@@ -2,8 +2,6 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader;
-
 	/**
 	 * Class Rewrite
 	 *
@@ -16,7 +14,7 @@ namespace WPLib_CLI {
 	 * @property string $ep_mask
 	 *
 	 */
-	class Rewrite extends JSON_Loader\Object {
+	class Rewrite extends Object {
 
 	}
 

@@ -2,6 +2,7 @@
 $labels = '$labels';
 
 echo <<< TEXT
+<?php
 /**
  * Class {$post_type->plural_class_name}
  */
@@ -24,6 +25,8 @@ class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
 			'menu_position' => {$post_type->menu_position},
 			'supports'      => {$post_type->supports},
 		));
+
+		[@include(hook-comments)]
 
 	}
 

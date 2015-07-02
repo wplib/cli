@@ -2,6 +2,8 @@
 
 namespace WPLib_CLI;
 
+use JSON_Loader\Util;
+
 /**
  * Autoloads classes from the /classes subdirectory.
  *
@@ -16,9 +18,9 @@ class Autoloader {
 
 		$class_name = preg_match( '#^(\\\\)?WPLib_CLI\\\\(.*)$#', $class_name, $match ) ? $match[2] : $class_name;
 
-		if ( preg_match( '#^[_a-zA-Z][_a-zA-Z0-9]*_Generator$#', $class_name ) ) {
+		if ( preg_match( '#^([_a-zA-Z][_a-zA-Z0-9]*_)?Generator$#', $class_name ) ) {
 
-			$class_file = strtolower( \JSON_Loader::dashify( "/../generators/{$class_name}.php" ) );
+			$class_file = strtolower( Util::dashify( "/../generators/{$class_name}.php" ) );
 
 			if ( is_file( $file_to_load = realpath( __DIR__ . $class_file ) ) ) {
 
@@ -28,7 +30,7 @@ class Autoloader {
 
 		} else {
 
-			$class_file = strtolower( \JSON_Loader::dashify( "/class-{$class_name}.php" ) );
+			$class_file = strtolower( Util::dashify( "/class-{$class_name}.php" ) );
 
 			if ( is_file( $file_to_load = realpath( __DIR__ . "/../objects{$class_file}" ) ) ) {
 
