@@ -15,16 +15,6 @@ namespace WPLib_CLI {
 
 		const SLUG = Post_Type::SLUG;
 
-		/**
-		 * @todo Do we even need to register this?
-		 */
-		function register() {
-
-			parent::register();
-
-			$this->initialize( $this->object, $this );
-
-		}
 
 	}
 
