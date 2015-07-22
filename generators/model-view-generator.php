@@ -20,9 +20,10 @@ namespace WPLib_CLI {
 
 			parent::register();
 
-			$this->register_output_file( static::SLUG . '-item',   $this->item_file() );
-			$this->register_output_file( static::SLUG . '-model',  $this->model_file() );
-			$this->register_output_file( static::SLUG . '-view',   $this->view_file() );
+			$slug = $this->dashified_slug();
+			$this->register_output_file( "{$slug}-item",   $this->item_file() );
+			$this->register_output_file( "{$slug}-model",  $this->model_file() );
+			$this->register_output_file( "{$slug}-view",   $this->view_file() );
 
 		}
 

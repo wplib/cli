@@ -10,13 +10,15 @@ namespace WPLib_CLI {
 	 * @property string $short_prefix      { @required }
 	 * @property string $slug              { @required }
 	 * @property string $root_dir          { @required }
-	 * @property string $text_domain       { @default $slug }  // TODO Make this @default value work
+	 * @property string $text_domain       { @default $slug }
 	 * @property App $app
 	 * @property Theme $theme
 	 */
 	class Root extends Object {
 
 		const SLUG = 'root';
+
+		const UNIQUE_ID = 'slug';
 
 	}
 

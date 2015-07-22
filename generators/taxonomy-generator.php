@@ -2,18 +2,17 @@
 
 namespace WPLib_CLI {
 
+	use JSON_Loader\Util;
 	/**
 	 * Class Taxonomy_Generator
-	 *
 	 *
 	 * @property Object|Taxonomy $object
 	 */
 	class Taxonomy_Generator extends Model_View_Generator {
 
-		const SLUG = 'taxonomy';
+		use Generator_Naming_Trait;
 
-		const UNIQUE_ID = 'singular_slug';
-
+		const SLUG = Taxonomy::SLUG;
 
 		/**
 		 * @todo Do we even need to register this?
@@ -25,7 +24,6 @@ namespace WPLib_CLI {
 			$this->initialize( $this->object, $this );
 
 		}
-
 
 	}
 

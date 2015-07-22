@@ -1,29 +1,33 @@
 <?php
-$labels = '$labels';
+/**
+ * @var \WPLib_CLI\Taxonomy_Generator $generator
+ * @var \WPLib_CLI\Taxonomy $taxonomy
+ */
+
+$class_name = $generator->plural_class_name;
+$initializers = $generator->php_initializers();
+$text_domain = $generator->root()->text_domain;
 
 echo <<< TEXT
 <?php
 /**
- * Class {$post_type->plural_class_name}
+ * Class {$class_name}
  */
-class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
+class {$class_name} extends WPLib_Term_Module_Base {
 
-	const POST_TYPE = '{$post_type->post_type}';
+	const TAXONOMY = '{$taxonomy->taxonomy}';
 
 	static function on_load() {
 
-		$labels = self::register_post_type_labels( array(
-			'name'          => __( '{$post_type->plural}', 'wplib' ),
-			'singular_name' => __( '{$post_type->singular}', 'wplib' ),
+		\$labels = self::register_taxonomy_labels( array(
+			'name'          => __( '{$taxonomy->plural}',   '{$text_domain}' ),
+			'singular_name' => __( '{$taxonomy->singular}', '{$text_domain}' ),
 		));
 
-		self::register_post_type( array(
-			'label'         => __( '{$post_type->plural}', 'wplib' ),
-			'labels'        => $labels,
-			'public'        => true,
-			'menu_icon'     => '{$post_type->menu_icon}',
-			'menu_position' => {$post_type->menu_position},
-			'supports'      => {$post_type->supports},
+		self::register_taxonomy( array(
+			'taxonomy' => static::TAXONOMY,
+			'labels'    => \$labels,
+			{$initializers}
 		));
 
 		[@include(hook-comments)]
@@ -31,5 +35,5 @@ class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
 	}
 
 }
-{$post_type->plural_class_name}::on_load();
+{$class_name}::on_load();
 TEXT;

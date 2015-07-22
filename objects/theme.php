@@ -29,7 +29,7 @@ namespace WPLib_CLI {
 
 				$state = Util::get_state( $theme );
 
-				$dir = $state->parent->root_dir;
+				$dir = $state->object_parent->root_dir;
 
 				if ( ! preg_match( '#^(~|/)$#', $dir[ 0 ] ) ) {
 

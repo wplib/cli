@@ -9,7 +9,6 @@ namespace WPLib_CLI {
 	 *
 	 * @property string $post_type                { @required }
 	 * @property string $singular                 { @required }
-	 * @property string $plural
 	 * @property string $description
 	 * @property bool $public                     { @initializer
 	 *                                              @default true
@@ -53,23 +52,26 @@ namespace WPLib_CLI {
 	 *                                              @wp_default true }
 	 * @property bool $can_export                 { @initializer
 	 *                                              @wp_default true }
-	 * @property string $no_prefix_post_type
+	 *
+	 * @TODO Move these into the traits and allow the parse header to find them.
+	 *
+	 * // FROM Object_Plural_Trait
+	 * @property string $plural
+	 *
+	 * // FROM Object_Slugs_Trait
 	 * @property string $singular_slug
 	 * @property string $plural_slug
-	 * @property string $singular_suffix
-	 * @property string $plural_suffix
-	 * @property string $singular_class_name
-	 * @property string $plural_class_name
-	 * @property string $module_slug
-	 * @property string $module_dir
-	 * @property string $module_file
-	 * @property string $module_name
-	 * @property string $includes_dir
 	 *
 	 */
 	class Post_Type extends Object {
 
 		const SLUG = 'post_type';
+
+		const UNIQUE_ID = 'post_type';
+
+		use Object_Plural_Trait;
+		use Object_Slugs_Trait;
+		use Object_Query_Var_Trait;
 
 		/**
 		 * @param array $capabilities
@@ -114,66 +116,6 @@ namespace WPLib_CLI {
 			$post_type = Util::get_prefixed_identifier( $post_type, Util::root()->short_prefix );
 
 			return $post_type;
-
-		}
-
-		/**
-		 * @param string $query_var
-		 *
-		 * @return string
-		 */
-		function query_var( $query_var ) {
-
-			return $query_var ? Util::get_prefixed_identifier( Util::root(), $query_var ) : $query_var;
-
-		}
-
-		/**
-		 * @param bool|string $value
-		 *
-		 * @return string
-		 */
-		function plural( $value = false ) {
-
-			return $value ? $value : "{$this->singular}s";
-
-		}
-
-		/**
-		 * @param null|string $slug
-		 *
-		 * @return string
-		 */
-		function singular_slug( $slug = false ) {
-
-			if ( ! $slug ) {
-
-				/**
-				 * @var Object|Post_Type $post_type
-				 */
-				$post_type = $this;
-
-				$slug = strtolower( Util::dashify( Util::strip_prefix(
-
-					Util::get_state_value( $post_type, 'post_type' ),
-
-					Util::root()->short_prefix
-
-				) ) );
-
-			}
-			return $slug;
-
-		}
-
-		/**
-		 * @param null|string $slug
-		 *
-		 * @return string
-		 */
-		function plural_slug( $slug ) {
-
-			return $slug ? $slug : "{$this->singular_slug}s";
 
 		}
 

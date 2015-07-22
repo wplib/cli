@@ -28,6 +28,9 @@ namespace WPLib_CLI {
 				'element_slug'  => Post_Type::SLUG,
 			));
 
+			$this->register_generator( 'taxonomies', $this->object->taxonomies, array(
+				'element_slug'  => Taxonomy::SLUG,
+			));
 
 		}
 

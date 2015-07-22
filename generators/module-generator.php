@@ -17,7 +17,7 @@ namespace WPLib_CLI {
 	 * @property string $css_dir
 	 * @property string $js_dir
 	 * @property Object $object
-	 * @property Object|App $parent
+	 * @property Object|App $object_parent
 	 *
 	 *
 	 */
@@ -48,37 +48,6 @@ namespace WPLib_CLI {
 				$this->module_file()
 			);
 
-
-		}
-
-		/**
-		 * @param Property[] $properties
-		 * @param array $args {
-		 *      @type int|null $tab_count
-		 *      @type string $trim
-		 * }
-		 *
-		 * @return bool|string
-		 */
-		function get_initializers( $properties = array(), $args = array() ) {
-
-			$args = Util::parse_args( $args, array(
-				'trim'      => 'trim',
-			));
-
-			if ( 0 === count( $properties ) ) {
-
-				$properties = Util::get_initializers( $this->object );
-
-			}
-
-			$properties = Util::filter_default_values( $properties, 'wp_default' );
-
-			$properties = Util::explode_args( $this->object, $properties );
-
-			$initializers = parent::get_initializers( $properties, $args );
-
-			return 'trim' === $args[ 'trim' ] ? ltrim( $initializers ) : $initializers;
 
 		}
 

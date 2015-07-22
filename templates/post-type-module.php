@@ -4,11 +4,10 @@
  * @var \WPLib_CLI\Post_Type $post_type
  */
 
-$initializers = $generator->get_initializers();
-
-$labels = '$labels';
-
 $class_name = $generator->plural_class_name;
+$initializers = $generator->php_initializers();
+$text_domain = $generator->root()->text_domain;
+
 
 echo <<< TEXT
 <?php
@@ -21,14 +20,14 @@ class {$class_name} extends WPLib_Post_Module_Base {
 
 	static function on_load() {
 
-		$labels = self::register_post_type_labels( array(
-			'name'          => __( '{$post_type->plural}', 'wplib' ),
-			'singular_name' => __( '{$post_type->singular}', 'wplib' ),
+		\$labels = self::register_post_type_labels( array(
+			'name'          => __( '{$post_type->plural}',   '{$text_domain}' ),
+			'singular_name' => __( '{$post_type->singular}', '{$text_domain}' ),
 		));
 
 		self::register_post_type( array(
 			'post_type' => static::POST_TYPE,
-			'labels'    => $labels,
+			'labels'    => \$labels,
 			{$initializers}
 		));
 

@@ -3,6 +3,7 @@
 namespace WPLib_CLI {
 
 	use \JSON_Loader;
+	use \JSON_Loader\Property;
 	use \JSON_Loader\Util;
 
 	/**
@@ -18,7 +19,7 @@ namespace WPLib_CLI {
 	abstract class Generator extends \JSON_Loader\Generator {
 
 		/**
-		 * Stub method so child can safely call its parent
+		 * Stub method so child can safely call its object_parent
 		 * Might want to put something here later, though.
 		 */
 		function register() {
@@ -62,6 +63,28 @@ namespace WPLib_CLI {
 			return $this->app()->app_dir;
 
 		}
+
+		/**
+		 * @return Property[]
+		 */
+		function initializer_properties() {
+
+			return Util::filter_default_values(
+				parent::initializer_properties(),
+				'wp_default'
+			);
+
+		}
+
+		/**
+		 * @return string
+		 */
+		function dashified_slug() {
+
+			return Util::dashify( static::SLUG );
+		}
+
+
 
 	}
 

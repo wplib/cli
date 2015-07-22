@@ -18,7 +18,7 @@ class Autoloader {
 
 		$class_name = preg_match( '#^(\\\\)?WPLib_CLI\\\\(.*)$#', $class_name, $match ) ? $match[2] : $class_name;
 
-		if ( preg_match( '#^([_a-zA-Z][_a-zA-Z0-9]*_)?Generator$#', $class_name ) ) {
+		if ( false !== strpos( $class_name, 'Generator' ) ) {
 
 			$class_file = strtolower( Util::dashify( "/../generators/{$class_name}.php" ) );
 
@@ -30,7 +30,7 @@ class Autoloader {
 
 		} else {
 
-			$class_file = strtolower( Util::dashify( "/class-{$class_name}.php" ) );
+			$class_file = strtolower( Util::dashify( "/{$class_name}.php" ) );
 
 			if ( is_file( $file_to_load = realpath( __DIR__ . "/../objects{$class_file}" ) ) ) {
 
