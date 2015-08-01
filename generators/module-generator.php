@@ -18,6 +18,7 @@ namespace WPLib_CLI {
 	 * @property string $js_dir
 	 * @property Object $object
 	 * @property Object|App $object_parent
+	 * @property Module_Generator $parent
 	 *
 	 *
 	 */
@@ -48,6 +49,15 @@ namespace WPLib_CLI {
 				$this->module_file()
 			);
 
+
+		}
+
+		/**
+		 * @return string
+		 */
+		function unique_id() {
+
+			return Util::strip_prefix( parent::unique_id(), Util::root()->short_prefix );
 
 		}
 
