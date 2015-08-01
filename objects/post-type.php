@@ -67,7 +67,7 @@ namespace WPLib_CLI {
 
 		const SLUG = 'post_type';
 
-		const UNIQUE_ID = 'post_type';
+		const ID_FIELD = 'post_type';
 
 		use Object_Plural_Trait;
 		use Object_Slugs_Trait;

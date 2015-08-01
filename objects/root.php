@@ -18,7 +18,7 @@ namespace WPLib_CLI {
 
 		const SLUG = 'root';
 
-		const UNIQUE_ID = 'slug';
+		const ID_FIELD = 'slug';
 
 	}
 

@@ -57,7 +57,7 @@ namespace WPLib_CLI {
 
 		const SLUG = 'taxonomy';
 
-		const UNIQUE_ID = 'taxonomy';
+		const ID_FIELD = 'taxonomy';
 
 		/**
 		 * @param string $singular

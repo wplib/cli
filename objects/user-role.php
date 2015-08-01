@@ -10,6 +10,8 @@ namespace WPLib_CLI {
 
 		const SLUG = 'user_role';
 
+		const ID_FIELD = 'ID';
+
 	}
 
 }
