@@ -22,16 +22,16 @@ class WPLib_CLI {
 
 		do {
 
-			if ( 0 == count( $args ) ) {
+			if ( 1 == count( $args ) ) {
 
-				echo "Action parameter required.";
+				$error = "Action parameter required.";
 				break;
 
 			}
 
 			if ( ! is_file( $json_file = getcwd() . '/wplib.json' ) ) {
 
-				echo "No wplib.json file.";
+				$error = "No wplib.json file.";
 				break;
 
 			}
@@ -57,7 +57,14 @@ class WPLib_CLI {
 
 		} while (false);
 
-		echo "Generated.\n\n";
+		if ( isset( $error ) ) {
+
+			echo "{$error}\n\n";
+			exit;
+
+		}
+
+		echo "\nDone.\n\n";
 
 	}
 
