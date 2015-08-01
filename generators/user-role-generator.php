@@ -9,7 +9,7 @@ namespace WPLib_CLI {
 	 */
 	class User_Role_Generator extends Model_View_Generator {
 
-		const SLUG = 'user_role';
+		const SLUG = User_Role::SLUG;
 
 	}
 
