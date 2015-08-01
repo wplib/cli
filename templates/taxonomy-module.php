@@ -24,7 +24,7 @@ class {$class_name} extends WPLib_Term_Module_Base {
 			'singular_name' => __( '{$taxonomy->singular}', '{$text_domain}' ),
 		));
 
-		self::register_taxonomy( array(
+		self::register_taxonomy( {$generator->object_type_php}, array(
 			'taxonomy' => static::TAXONOMY,
 			'labels'    => \$labels,
 			{$initializers}
