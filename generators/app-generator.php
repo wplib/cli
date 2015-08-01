@@ -11,6 +11,7 @@ namespace WPLib_CLI {
 	 * @property string $app_dir
 	 * @property string $modules_dir
 	 * @property string $app_file
+	 * @property string $init_file
 	 * @property App $object
 	 *
 	 */
@@ -23,6 +24,8 @@ namespace WPLib_CLI {
 			$this->register_dirs( $this->app_dir );
 
 			$this->register_output_file( 'app', $this->app_file );
+
+			$this->register_output_file( 'init', $this->init_file );
 
 			$this->register_generator( 'post-types', $this->object->post_types, array(
 				'element_slug'  => Post_Type::SLUG,
@@ -41,6 +44,18 @@ namespace WPLib_CLI {
 
 			$root = Util::root();
 			$app_file = "{$this->app_dir}/{$root->slug}-app.php";
+
+			return $app_file;
+
+		}
+
+		/**
+		 * @return string
+		 */
+		function init_file() {
+
+			$root = Util::root();
+			$app_file = "{$this->app_dir}/{$root->slug}-init.php";
 
 			return $app_file;
 
