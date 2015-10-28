@@ -6,8 +6,7 @@
 
 $class_name = $generator->plural_class_name;
 $initializers = $generator->php_initializers();
-$text_domain = $generator->root()->text_domain;
-
+$text_domain = $generator->text_domain;
 
 echo <<< TEXT
 <?php

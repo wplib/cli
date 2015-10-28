@@ -36,24 +36,29 @@ class WPLib_CLI {
 
 			}
 
-			$root = Loader::load( '\WPLib_CLI\Root', $json_file );
+			switch ( $args[1] ) {
 
-			if ( Validator::validate( $root ) ) {
+				case 'generate':
 
-				switch ( $args[1] ) {
+					if ( empty( $args[2] ) ) {
+						$error = "generate requires an argument,i.e. 'app', etc.";
+					} else if ( !( $root_class = self::get_object_class( $args[2] ) ) ) {
+						$error = sprintf( "generate argument '%s' is not a valid object type.", $args[2] );
+					} else {
+						$root = Loader::load( $root_class, $json_file );
+						if ( Validator::validate( $root ) ) {
 
-					case 'generate':
+							Generator::generate( $root, "{$root_class}_Generator" );
+						}
+					}
+					break;
 
-						Generator::generate( $root );
-						break;
-
-					case 'show-data':
-						Output::show_data( $root );
-						break;
-
-				}
+				case 'show-data':
+					//Output::show_data( $root );
+					break;
 
 			}
+
 
 		} while (false);
 
@@ -68,6 +73,39 @@ class WPLib_CLI {
 
 	}
 
+	static function get_object_class( $type ) {
+		do {
+
+			$object_class = null;
+
+			$object_file = self::get_object_file( $type );
+			if ( ! is_file( $object_file ) ) {
+				$error = sprintf( 'The source file %s does not exist for object type %s.', $object_file, $type );
+				break;
+			}
+
+			$source_code = file_get_contents( $object_file );
+			if ( ! preg_match( '#class\s+([^\s]+)\s+extends#', $source_code, $match ) ) {
+				$error = sprintf( 'The source file %s does not contain a PHP class.', $object_file );
+				break;
+			}
+
+			$object_class = "\\WPLib_CLI\\{$match[1]}";
+
+		} while ( false );
+
+		return $object_class;
+
+	}
+
+
+	static function get_object_file( $type ) {
+
+		$class_file = strtolower( Util::dashify( "/{$type}.php" ) );
+
+		return realpath( __DIR__ . "/../objects{$class_file}" );
+
+	}
 	static function load( $template, $args ) {
 
 		extract( $args, EXTR_OVERWRITE );

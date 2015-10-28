@@ -25,7 +25,7 @@ namespace WPLib_CLI {
 
 			foreach( $this->_get_post_types( $this->object->object_type ) as $post_type ) {
 
-				$generator = new Post_Type_Generator( $post_type, Util::root()->app );
+				$generator = new Post_Type_Generator( $post_type, $this );
 
 				$class_names[] = $generator->singular_class_name;
 
@@ -60,13 +60,9 @@ namespace WPLib_CLI {
 
 			}
 
-			$root = Util::root();
+			foreach( $this->post_types as $post_type_slug => $post_type ) {
 
-			$post_types = $root->app->post_types;
-
-			foreach( $post_types as $post_type_slug => $post_type ) {
-
-				$slug = Util::strip_prefix( $post_type_slug, $root->short_prefix );
+				$slug = Util::strip_prefix( $post_type_slug, $this->prefix );
 
 				if ( ! in_array( $slug, $slugs ) ) {
 

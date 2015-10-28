@@ -7,6 +7,10 @@ namespace WPLib_CLI {
 	/**
 	 * Class App
 	 *
+	 * @property string $type              { @required }
+	 * @property string $name              { @required }
+	 * @property string $prefix            { @required }
+	 * @property string $slug              { @required }
 	 * @property Post_Type[] $post_types
 	 * @property Taxonomy[] $taxonomies
 	 * @property User_Role[] $user_roles

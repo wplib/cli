@@ -32,11 +32,11 @@ class Autoloader {
 
 			$class_file = strtolower( Util::dashify( "/{$class_name}.php" ) );
 
-			if ( is_file( $file_to_load = realpath( __DIR__ . "/../objects{$class_file}" ) ) ) {
+			if ( is_file( $file_to_load = \WPLib_CLI::get_object_file( $class_name ) ) ) {
 
 				require( $file_to_load );
 
-			} else if ( is_file( $file_to_load = __DIR__ . $class_file ) ) {
+			} else if ( is_file( $file_to_load = __DIR__ . '/' . basename( $class_file ) ) ) {
 
 				require( $file_to_load );
 

@@ -62,7 +62,9 @@ namespace WPLib_CLI {
 
 			$suffix = '.php' !== $suffix ? "-{$suffix}" : $suffix;
 
-			return "{$this->includes_dir()}/class-{$this->unique_id()}{$suffix}";
+			$uid = $this->unique_id();
+
+			return "{$this->includes_dir()}/class-{$uid}{$suffix}";
 
 		}
 	}

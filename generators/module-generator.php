@@ -11,18 +11,24 @@ namespace WPLib_CLI {
 	 * @property string $module_name
 	 * @property string $module_dir
 	 * @property string $module_file
-	 * @property string $includes_dir
-	 * @property string $assets_dir
-	 * @property string $images_dir
-	 * @property string $css_dir
-	 * @property string $js_dir
 	 * @property Object $object
 	 * @property Object|App $object_parent
 	 * @property Module_Generator $parent
 	 *
+	 * @see Generator_Directory_Trait
+	 * @property string $root_dir
+	 * @property string $includes_dir
+	 * @property string $modules_dir
+	 * @property string $templates_dir
+	 * @property string $assets_dir
+	 * @property string $images_dir
+	 * @property string $css_dir
+	 * @property string $js_dir
 	 *
 	 */
 	abstract class Module_Generator extends Generator {
+
+		use Generator_Directory_Trait;
 
 		const SLUG = 'module-generator';
 
@@ -31,18 +37,10 @@ namespace WPLib_CLI {
 		 */
 		function register() {
 
+			/**
+			 * Call Generator_Directory_Trait->register()
+			 */
 			parent::register();
-
-			$this->register_dirs( array(
-
-				$this->module_dir,
-				$this->includes_dir,
-				$this->assets_dir,
-				$this->images_dir,
-				$this->css_dir,
-				$this->js_dir,
-
-			) );
 
 			$this->register_output_file(
 				$this->filenameify( 'module' ),
@@ -57,7 +55,8 @@ namespace WPLib_CLI {
 		 */
 		function unique_id() {
 
-			return Util::strip_prefix( parent::unique_id(), Util::root()->short_prefix );
+			$prefix = $this->prefix;
+			return Util::strip_prefix( parent::unique_id(), $prefix );
 
 		}
 
@@ -66,16 +65,8 @@ namespace WPLib_CLI {
 		 */
 		function module_name() {
 
-			return $this->filenameify( $this->unique_id() );
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function modules_dir() {
-
-			return $this->parent->modules_dir();
+			return $this->name;
+			//return $this->filenameify( $this->unique_id() );
 
 		}
 
@@ -97,52 +88,14 @@ namespace WPLib_CLI {
 
 		}
 
-		/**
-		 * @return string
-		 */
-		function includes_dir() {
-
-			return "{$this->module_dir()}/includes";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function assets_dir() {
-
-			return "{$this->module_dir()}/assets";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function images_dir() {
-
-			return "{$this->assets_dir()}/images";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function css_dir() {
-
-			return "{$this->assets_dir()}/css";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function js_dir() {
-
-			return "{$this->assets_dir()}/js";
-
-		}
-
-
+//		/**
+//		 * @return string
+//		 */
+//		function modules_dir() {
+//
+//			return $this->parent->modules_dir();
+//
+//		}
 
 	}
 

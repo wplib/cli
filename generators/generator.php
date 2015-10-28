@@ -7,14 +7,14 @@ namespace WPLib_CLI {
 	use \JSON_Loader\Util;
 
 	/**
-	 * Class Module_Generator
+	 * Class Generator
 	 *
-	 * @property string $module_dir
-
-	 * @property Root $object
-	 * @property string $modules_dir
-	 * @property string $theme_dir
-	 * @property string $app_dir
+	 * @property string $name
+	 * @property string $slug
+	 * @property string $root_dir
+	 * @property string $type
+	 * @property string $prefix
+	 * @property string $text_domain
 	 */
 	abstract class Generator extends \JSON_Loader\Generator {
 
@@ -24,43 +24,27 @@ namespace WPLib_CLI {
 		 */
 		function register() {
 
-		 	parent::register();
+			parent::register();
 
 		}
 
 		/**
-		 * @return Object|Theme
-		 */
-		function theme() {
-
-			return Util::root()->theme;
-
-		}
-
-		/**
-		 * @return Object|App
-		 */
-		function app() {
-
-			return Util::root()->app;
-
-		}
-
-		/**
+		 * @param string $slug
 		 * @return string
 		 */
-		function theme_dir() {
+		function slug( $slug ) {
 
-			return $this->theme()->theme_dir;
+			return $slug ? $slug : strtolower( $this->name );
 
 		}
 
 		/**
+		 * @param string $root_dir
 		 * @return string
 		 */
-		function app_dir() {
+		function root_dir() {
 
-			return $this->app()->app_dir;
+			return getcwd();
 
 		}
 
@@ -84,6 +68,65 @@ namespace WPLib_CLI {
 			return Util::dashify( static::SLUG );
 		}
 
+
+
+//		function register() {
+//			/**
+//			 * @todo Add some way to checkout WPLib to this dir, if not there.
+//			 */
+//			$this->register_dirs( $this->wplib_dir );
+//
+//			$this->register_generator( Theme::SLUG, $this->theme() );
+//
+//			$this->register_generator( App::SLUG, $this->app() );
+//
+//		}
+//
+//		/**
+//		 * @return string
+//		 */
+//		function wplib_dir() {
+//
+//			return "{$this->theme->theme_dir}/wplib";
+//
+//		}
+//
+//
+//		/**
+//		 * @return Object|Theme
+//		 */
+//		function theme() {
+//
+//			return Util::root()->theme;
+//
+//		}
+//
+//		/**
+//		 * @return Object|App
+//		 */
+//		function app() {
+//
+//			return Util::root()->app;
+//
+//		}
+//
+//		/**
+//		 * @return string
+//		 */
+//		function theme_dir() {
+//
+//			return $this->theme()->theme_dir;
+//
+//		}
+//
+//		/**
+//		 * @return string
+//		 */
+//		function app_dir() {
+//
+//			return $this->app()->app_dir;
+//
+//		}
 
 
 	}

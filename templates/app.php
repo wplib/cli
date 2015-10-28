@@ -1,6 +1,6 @@
 <?php
 
-$class_name = $app->prefix;
+$class_name = $app->name;
 
 echo <<< TEXT
 <?php
@@ -11,7 +11,7 @@ class {$class_name} extends WPLib_App_Base {
 
 	static function on_load() {
 
-		WPLib::register_helper( __CLASS__, 'WPLib' );
+		[@include(hook-comments)]
 
 	}
 

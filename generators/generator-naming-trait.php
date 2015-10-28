@@ -11,7 +11,7 @@ namespace WPLib_CLI {
 	 *
 	 * @package WPLib_CLI
 	 *
-	 * @method Root root()
+	 * @property Object $name
 	 * @property Object $object
 	 *
 	 * @property string $singular_class_name
@@ -25,7 +25,7 @@ namespace WPLib_CLI {
 		 */
 		function get_class_name_base( $suffix ) {
 
-			return Util::underscorify( "{$this->root()->prefix}_{$suffix}" );
+			return Util::underscorify( "{$this->name}_{$suffix}" );
 
 		}
 

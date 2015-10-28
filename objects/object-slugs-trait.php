@@ -36,7 +36,7 @@ namespace WPLib_CLI {
 
 					Util::get_state_value( $taxonomy, static::SLUG ),
 
-					Util::root()->short_prefix
+					$this->prefix
 
 				) ) );
 

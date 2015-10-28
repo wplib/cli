@@ -113,7 +113,7 @@ namespace WPLib_CLI {
 
 			}
 
-			$post_type = Util::get_prefixed_identifier( $post_type, Util::root()->short_prefix );
+			$post_type = Util::get_prefixed_identifier( $post_type, $this->prefix );
 
 			return $post_type;
 
