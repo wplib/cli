@@ -14,9 +14,9 @@ There are four (4) different types of `wplib.json` files, only two of which are 
 Types|Notes
 ---|---
 **Root**| See [`sample/wplib.json`](sample/wplib.json)
-**Site**| _Not yet implemented._
+**Site**| See [`sample/www/wplib.json`](sample/www/wplib.json) _This is not used yet._
 **App**| See  [`sample/www/wp-content/mu-plugins/sample-app/wplib.json`](sample/www/wp-content/mu-plugins/sample-app/wplib.json)
-**Theme**| _Not yet implemented._
+**Theme**| See  [`sample/www/wp-content/themes/sample-app/wplib.json`](sample/www/wp-content/themes/sample-app/wplib.json)  _This is not used yet._
 
 ##Dependencies
 
