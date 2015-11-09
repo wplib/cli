@@ -1,0 +1,52 @@
+{
+	"@type": "App",
+	"post_types": [
+		{
+			"post_type": "firm",
+			"singular": "Firm",
+			"menu_icon": "dashicons-admin-site",
+			"supports": "title,editor,thumbnail"
+		},
+		{
+			"post_type": "person",
+			"singular": "Person",
+			"plural": "People",
+			"menu_icon": "dashicons-businessman",
+			"supports": "title,editor,thumbnail"
+		},
+		{
+			"post_type": "office",
+			"singular": "Office",
+			"menu_icon": "dashicons-store",
+			"supports": "title,editor,thumbnail"
+		},
+		{
+			"post_type": "event",
+			"singular": "Event",
+			"menu_icon": "dashicons-calendar-alt"
+		},
+		{
+			"post_type": "sig",
+			"singular": "SIG",
+			"menu_icon": "dashicons-groups"
+		},
+		{
+			"post_type": "resource",
+			"singular": "Resource",
+			"menu_icon": "dashicons-book-alt",
+			"supports": "title,editor,thumbnail"
+		}
+	],
+	"taxonomies": [
+		{
+			"taxonomy": "region",
+			"singular": "Region",
+			"post_types": "firm,office"
+		},
+		{
+			"taxonomy": "language",
+			"singular": "Language",
+			"post_types": "person"
+		}
+	]
+}

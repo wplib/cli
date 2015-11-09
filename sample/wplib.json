@@ -1,0 +1,12 @@
+{
+	"@type": "Root",
+	"meta": {
+		"name": "SampleApp",
+		"prefix": "sa",
+		"slug": "sample-app"
+	},
+	"site":  "~/www",
+	"app":   "~/www/wp-content/mu-plugins/sample-app",
+	"theme": "~/www/wp-content/themes/sample-app"
+}
+
