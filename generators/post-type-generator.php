@@ -11,10 +11,7 @@ namespace WPLib_CLI {
 	 */
 	class Post_Type_Generator extends Model_View_Generator {
 
-		use Generator_Naming_Trait;
-
 		const SLUG = Post_Type::SLUG;
-
 
 	}
 

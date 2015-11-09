@@ -7,10 +7,11 @@ namespace WPLib_CLI {
 	use JSON_Loader\Util;
 
 	/**
-	 * Class Object_Slugs_Trait
+	 * Trait Object_Slugs_Trait
 	 *
 	 * @package WPLib_CLI
-	 *
+	 * @mixin \WPLib_CLI\Object
+	 * @mixin Meta_Properties_Trait;
 	 * @constant SLUG
 	 * @property string $singular
 	 * @property string $singular_slug
@@ -19,7 +20,7 @@ namespace WPLib_CLI {
 	trait Object_Slugs_Trait {
 
 		/**
-		 * @param bool|string $slug
+		 * @param boolean|string $slug
 		 *
 		 * @return string
 		 */
@@ -27,18 +28,7 @@ namespace WPLib_CLI {
 
 			if ( ! $slug ) {
 
-				/**
-				 * @var Object|Taxonomy $taxonomy
-				 */
-				$taxonomy = $this;
-
-				$slug = strtolower( Util::dashify( Util::strip_prefix(
-
-					Util::get_state_value( $taxonomy, static::SLUG ),
-
-					$this->prefix
-
-				) ) );
+				$slug = strtolower( Util::dashify( Util::strip_prefix( $this->get_unique_id(), $this->meta_prefix() ) ) );
 
 			}
 			return $slug;
@@ -46,7 +36,7 @@ namespace WPLib_CLI {
 		}
 
 		/**
-		 * @param bool|string $slug
+		 * @param boolean|string $slug
 		 *
 		 * @return string
 		 */

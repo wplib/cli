@@ -4,7 +4,7 @@
  * @var \WPLib_CLI\Taxonomy $taxonomy
  */
 
-WPLib_CLI::load( 'includes/model-view-item', array(
+WPLib_CLI::instance()->load_template( 'includes/model-view-item', array(
 
 	'constant_name'       => 'TAXONOMY',
 	'singular_class_name' => $generator->singular_class_name,

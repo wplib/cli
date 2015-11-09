@@ -7,7 +7,7 @@ namespace WPLib_CLI {
 	use JSON_Loader\Util;
 
 	/**
-	 * Class Object_Plural_Trait
+	 * Trait Object_Plural_Trait
 	 *
 	 * @package WPLib_CLI
 	 *
@@ -22,7 +22,7 @@ namespace WPLib_CLI {
 		 *
 		 * If empty $value then Adds 'ies' to the end of $this->singular if it ends with 'y', or 's' to the end otherwise.
 		 *
-		 * @param bool|string $value
+		 * @param boolean|string $value
 		 *
 		 * @return string
 		 */

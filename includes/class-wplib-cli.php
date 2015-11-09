@@ -11,7 +11,32 @@ use JSON_Loader\Util;
  */
 class WPLib_CLI {
 
+	static $CLASS_FACTORY =  array( __CLASS__, 'make_new' );
+
 	static $template;
+
+	/**
+	 * @var self
+	 */
+	static $instance;
+
+	/**
+	 * @return self
+	 */
+    static function instance() {
+
+		return self::$instance;
+
+    }
+
+	/**
+	 * @return string
+	 */
+    static function root_dir() {
+
+		return dirname( __DIR__ );
+
+    }
 
 	/**
 	 * @param array $args
@@ -40,21 +65,22 @@ class WPLib_CLI {
 
 				case 'generate':
 
-					if ( empty( $args[2] ) ) {
-						$error = "generate requires an argument,i.e. 'app', etc.";
-					} else if ( !( $root_class = self::get_object_class( $args[2] ) ) ) {
-						$error = sprintf( "generate argument '%s' is not a valid object type.", $args[2] );
-					} else {
-						$root = Loader::load( $root_class, $json_file );
-						if ( Validator::validate( $root ) ) {
+					do {
 
-							Generator::generate( $root, "{$root_class}_Generator" );
+						$root = $this->load( $json_file, self::$CLASS_FACTORY );
+
+						if ( $this->validate( $root ) ) {
+
+							$this->generate( $root );
+
 						}
-					}
+
+					} while ( false );
+
 					break;
 
 				case 'show-data':
-					//Output::show_data( $root );
+					//Output::show_data( $meta );
 					break;
 
 			}
@@ -73,24 +99,172 @@ class WPLib_CLI {
 
 	}
 
-	static function get_object_class( $type ) {
+	/**
+	 * @param string $filepath
+	 * @param callable $class_factory
+	 * @param array $args {
+     *      @type boolean|\JSON_Loader\Logger $logger
+	 * }
+	 * @return \JSON_Loader\Object
+	 */
+	function load( $filepath, $class_factory, $args = array() ) {
+
+		$object = Loader::instance()->load( $filepath, $class_factory, $args );
+
+		return $object;
+
+	}
+
+	/**
+	 * @param \JSON_Loader\Object $object
+	 * @param array $args
+	 * @return \JSON_Loader\Object
+	 */
+	function validate( $object, $args = array() ) {
+
+		return Validator::instance()->validate( $object, $args );
+
+	}
+
+	/**
+	 * @param \JSON_Loader\Object $object
+	 * @return \JSON_Loader\Object
+	 */
+	function generate( $object ) {
+
+		return Generator::generate( $object );
+
+	}
+
+	/**
+	 * Object factory to return one of the (currently) four valid object type: 'meta', 'site', 'app' or 'theme'.
+	 *
+	 * @param stdClass $data
+	 * @param string $filepath Filepath for the wplib.json file
+	 * @param array $args {
+	 *      @type Object|boolean $parent
+	 * }
+	 * @return \JSON_Loader\Object
+	 */
+	static function make_new( $data, $filepath, $args ) {
+
+		do {
+
+			$args = Util::parse_args( $args, array(
+				'parent' => false,
+			));
+
+			$object = null;
+			$err_msg = false;
+
+			$object_type = property_exists( $data, '@type' )
+					? $data->{'@type'}
+					: '\\WPLib_CLI\\Root';
+
+			$object_class = self::get_object_class( $object_type );
+
+			if ( ! class_exists( $object_class ) ) {
+				$err_msg = "@type=%s from wplib.json does not represent a valid class.";
+				break;
+			}
+
+			/**
+			 * @var Object $object
+			 */
+			$object = new $object_class( $data, $args[ 'parent' ], array(
+				'filepath' => dirname( $filepath ),
+			));
+
+			if ( ! $object instanceof \JSON_Loader\Object ) {
+				$err_msg = "@type=%s from wplib.json is not an instance of \\JSON_Loader\\Object.";
+				break;
+			}
+
+			foreach( $object->get_loadable_properties() as $property_name => $property ) {
+
+				if ( ! is_string( $value = $object->get_value( $property_name ) ) ) {
+
+					continue;
+
+				}
+
+				/*
+				 * Strip off the /wplib.json from the containING filepath.
+				 * Remove the trailing slash too.
+				 */
+				$dir = preg_replace( '#^(.+)/wplib.json$#', '$1', $filepath );
+
+				/*
+				 * Strip off the ~/ prefix, if exists from the containED filepath.
+				 * Concatonate $dir, '/' and everything after ~/
+				 */
+				$child_filepath = preg_replace( '#^~/(.*)$#', "{$dir}/$1", $value );
+
+				/*
+				 * Ensure we have /wplib.json on the filepath
+				 */
+				$child_filepath = preg_replace( '#^(.*?)(/?)(wplib.json)?$#', "$1/wplib.json", $child_filepath );
+
+				/*
+				 * Check to see if the containED wplib.json exists.
+				 */
+				if ( ! is_file( $child_filepath ) ) {
+
+					$err_msg = 'The file %s specified for the property `%s` as %s resolved to %s but does not exist.';
+					Util::log_error( sprintf( $err_msg, $value, $property_name, $filepath, $child_filepath ) );
+
+				}
+
+				/*
+				 * Now load everything that referenced and not included.
+				 */
+				$value = self::instance()->load( $child_filepath, static::$CLASS_FACTORY, array(
+					'parent'   => $object,
+					'filepath' => dirname( $child_filepath ),
+				));
+
+				$object->set_value( $property_name, $value );
+
+
+			}
+
+		} while ( false );
+
+		if ( $err_msg ) {
+			Util::log_error( sprintf( $err_msg, $object_type ) );
+		}
+
+		return $object;
+
+	}
+
+	/**
+	 * @param string $object_type
+	 *
+	 * @return null|string
+	 */
+	static function get_object_class( $object_type ) {
+
 		do {
 
 			$object_class = null;
 
-			$object_file = self::get_object_file( $type );
-			if ( ! is_file( $object_file ) ) {
-				$error = sprintf( 'The source file %s does not exist for object type %s.', $object_file, $type );
+			if ( class_exists( $object_type ) ) {
+				$object_class = $object_type;
 				break;
 			}
 
-			$source_code = file_get_contents( $object_file );
-			if ( ! preg_match( '#class\s+([^\s]+)\s+extends#', $source_code, $match ) ) {
-				$error = sprintf( 'The source file %s does not contain a PHP class.', $object_file );
+			$try_class = "\\WPLib_CLI\\{$object_type}";
+
+			if ( class_exists( $try_class ) ) {
+				$object_class = $try_class;
 				break;
 			}
 
-			$object_class = "\\WPLib_CLI\\{$match[1]}";
+			if ( class_exists( $try_class = "\\WPLib_CLI\\" . Util::underscorify( ucwords( $object_type ) ) ) ) {
+				$object_class = $try_class;
+				break;
+			}
 
 		} while ( false );
 
@@ -106,7 +280,7 @@ class WPLib_CLI {
 		return realpath( __DIR__ . "/../objects{$class_file}" );
 
 	}
-	static function load( $template, $args ) {
+	static function load_template( $template, $args ) {
 
 		extract( $args, EXTR_OVERWRITE );
 
@@ -118,3 +292,4 @@ class WPLib_CLI {
 	}
 
 }
+WPLib_CLI::$instance = new WPLib_CLI();

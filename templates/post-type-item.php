@@ -1,6 +1,6 @@
 <?php
 
-WPLib_CLI::load( 'includes/model-view-item', array(
+WPLib_CLI::instance()->load_template( 'includes/model-view-item', array(
 
 	'constant_name'       => 'POST_TYPE',
 	'singular_class_name' => $generator->singular_class_name,

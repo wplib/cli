@@ -26,14 +26,15 @@ namespace WPLib_CLI {
 
 		const SLUG = App::SLUG;
 
-		use Generator_Directory_Trait;
+		use Module_Directories_Generator_Trait;
 
 		function register() {
 
 			/**
-			 * Call Generator_Directory_Trait->register()
+			 * Call Module_Directories_Generator_Trait->register_module_directories()
+			 * Apps have the same directory structure
 			 */
-			parent::register();
+			self::register_module_directories();
 
 			$this->register_output_file( 'app', $this->app_file() );
 
@@ -52,7 +53,7 @@ namespace WPLib_CLI {
 		 */
 		function app_file() {
 
-			return "{$this->app_dir}/{$this->app_slug}.php";
+			return "{$this->this_dir()}/{$this->this_slug()}.php";
 
 		}
 
@@ -61,25 +62,7 @@ namespace WPLib_CLI {
 		 */
 		function modules_dir() {
 
-			return "{$this->app_dir}/modules";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function app_dir() {
-
-			return $this->root_dir;
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function app_slug() {
-
-			return Util::dashify( strtolower( $this->object->name ));
+			return "{$this->this_dir()}/modules";
 
 		}
 

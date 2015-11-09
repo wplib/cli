@@ -2,6 +2,7 @@
 
 namespace WPLib_CLI {
 
+	use JSON_Loader\Util;
 	/**
 	 * Class Model_View_Generator
 	 *
@@ -20,7 +21,7 @@ namespace WPLib_CLI {
 
 			parent::register();
 
-			$slug = $this->dashified_slug();
+			$slug = $this->module_type_slug();
 			$this->register_output_file( "{$slug}-item",   $this->item_file() );
 			$this->register_output_file( "{$slug}-model",  $this->model_file() );
 			$this->register_output_file( "{$slug}-view",   $this->view_file() );
@@ -62,9 +63,15 @@ namespace WPLib_CLI {
 
 			$suffix = '.php' !== $suffix ? "-{$suffix}" : $suffix;
 
-			$uid = $this->unique_id();
+			$filename = "{$this->includes_dir()}/class-{$this->object_unique_id()}{$suffix}";
 
-			return "{$this->includes_dir()}/class-{$uid}{$suffix}";
+			return $filename;
+
+		}
+
+		function module_type_slug() {
+
+			return $this->filenameify( Util::get_constant( 'SLUG' ) );
 
 		}
 	}

@@ -12,8 +12,6 @@ namespace WPLib_CLI {
 	 */
 	class Taxonomy_Generator extends Model_View_Generator {
 
-		use Generator_Naming_Trait;
-
 		const SLUG = Taxonomy::SLUG;
 
 		/**
@@ -23,11 +21,9 @@ namespace WPLib_CLI {
 
 			$class_names = array();
 
-			foreach( $this->_get_post_types( $this->object->object_type ) as $post_type ) {
+			foreach( $this->get_post_type_objects() as $post_type ) {
 
-				$generator = new Post_Type_Generator( $post_type, $this );
-
-				$class_names[] = $generator->singular_class_name;
+				$class_names[] = $post_type->singular_class_name;
 
 			}
 			if ( 1 == count( $class_names ) ) {
@@ -46,27 +42,31 @@ namespace WPLib_CLI {
 
 		}
 
-
 		/**
-		 * @param string[] $slugs
-		 *
 		 * @return Post_Type[]
 		 */
-		private function _get_post_types( $slugs ) {
+		private function get_post_type_objects() {
 
-			if ( is_string( $slugs ) ) {
+			$post_types = $this->object->post_types;
 
-				$slugs = array( $slugs );
+			foreach( $post_types as $index => $post_type ) {
+				/**
+				 * @var App $app
+				 */
+				$app = $this->parent;
 
-			}
+				foreach( $app->post_types as $post_type_object ) {
 
-			foreach( $this->post_types as $post_type_slug => $post_type ) {
+					$object_post_type =  Util::strip_prefix(
+						$post_type_object->post_type,
+						$this->this_prefix()
+					);
 
-				$slug = Util::strip_prefix( $post_type_slug, $this->prefix );
+					if ( $object_post_type === $post_type ) {
 
-				if ( ! in_array( $slug, $slugs ) ) {
+						$post_types[ $index ] = $post_type_object;
 
-					unset( $post_types[ $post_type_slug ] );
+					}
 
 				}
 

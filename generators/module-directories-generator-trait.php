@@ -7,7 +7,7 @@ namespace WPLib_CLI {
 	use JSON_Loader\Util;
 
 	/**
-	 * Class Generator_Directory_Trait
+	 * Class Module_Directories_Generator_Trait
 	 *
 	 * @package WPLib_CLI
 	 * @mixin Generator
@@ -17,7 +17,6 @@ namespace WPLib_CLI {
 	 * @property string $singular_class_name
 	 * @property string $plural_class_name
 	 *
-	 * @property string $root_dir
 	 * @property string $includes_dir
 	 * @property string $modules_dir
 	 * @property string $templates_dir
@@ -25,13 +24,13 @@ namespace WPLib_CLI {
 	 * @property string $images_dir
 	 * @property string $css_dir
 	 * @property string $js_dir
+	 * @property string $this_dir
 	 *
-	 * @method string module_dir()
 	 */
-	trait Generator_Directory_Trait {
+	trait Module_Directories_Generator_Trait {
 
 
-		function register() {
+		function register_module_directories() {
 
 			$this->register_dirs( array(
 				$this->modules_dir,
@@ -49,7 +48,7 @@ namespace WPLib_CLI {
 		 */
 		function assets_dir() {
 
-			return "{$this->root_dir}/assets";
+			return "{$this->this_dir}/assets";
 
 		}
 
@@ -58,16 +57,7 @@ namespace WPLib_CLI {
 		 */
 		function includes_dir() {
 
-			return "{$this->root_dir}/includes";
-
-		}
-
-		/**
-		 * @return string
-		 */
-		function modules_dir() {
-
-			return "{$this->root_dir}/modules";
+			return "{$this->this_dir()}/includes";
 
 		}
 
@@ -76,7 +66,7 @@ namespace WPLib_CLI {
 		 */
 		function templates_dir() {
 
-			return "{$this->root_dir}/templates";
+			return "{$this->this_dir}/templates";
 
 		}
 

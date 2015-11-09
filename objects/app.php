@@ -7,10 +7,6 @@ namespace WPLib_CLI {
 	/**
 	 * Class App
 	 *
-	 * @property string $type              { @required }
-	 * @property string $name              { @required }
-	 * @property string $prefix            { @required }
-	 * @property string $slug              { @required }
 	 * @property Post_Type[] $post_types
 	 * @property Taxonomy[] $taxonomies
 	 * @property User_Role[] $user_roles
@@ -28,7 +24,7 @@ namespace WPLib_CLI {
 
 			if ( ! is_array( $post_types ) ) {
 
-				$post_types = Util::root()->app->post_types;
+				$post_types = Util::meta()->app->post_types;
 
 			}
 
@@ -38,7 +34,7 @@ namespace WPLib_CLI {
 			foreach ( $post_types as $index => $post_type ) {
 
 				unset( $post_types[ $index ] );
-				$post_types[ $post_type->post_type() ] = $post_type;
+				$post_types[ $post_type->post_type ] = $post_type;
 
 			}
 

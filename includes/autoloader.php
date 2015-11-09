@@ -14,38 +14,71 @@ use JSON_Loader\Util;
  */
 class Autoloader {
 
-	static function autoload( $class_name ) {
+	private static $_class_files = array();
 
-		$class_name = preg_match( '#^(\\\\)?WPLib_CLI\\\\(.*)$#', $class_name, $match ) ? $match[2] : $class_name;
+	static function autoload( $declaration_name ) {
 
-		if ( false !== strpos( $class_name, 'Generator' ) ) {
+		do {
 
-			$class_file = strtolower( Util::dashify( "/../generators/{$class_name}.php" ) );
+			$namespace_regex = preg_quote( __NAMESPACE__ . '\\' );
 
-			if ( is_file( $file_to_load = realpath( __DIR__ . $class_file ) ) ) {
+			if ( ! preg_match( "#^{$namespace_regex}(.+)$#", $declaration_name, $match ) ) {
+				/*
+				 * We are only autoloading for our own namespace
+				 */
+				break;
+			}
 
-				require( $file_to_load );
+			$root_dir = \WPLib_CLI::root_dir();
+
+			$base_name = Util::dashify( $match[1] );
+
+			$path = preg_match( '#^.*_?Generator(_Trait)?$#', $declaration_name )
+				? 'generators'
+				: 'objects';
+
+			$filepath = "{$root_dir}/{$path}/{$base_name}.php";
+
+			if ( ! is_file( $filepath ) ) {
+				/*
+				 * Not a file for us to handle.
+				 */
+				break;
+			}
+
+			require( $filepath );
+
+			if ( class_exists( $declaration_name ) ) {
+
+				$declarations = get_declared_classes();
+				$type_loaded = 'class';
+
+			} else if ( trait_exists( $declaration_name ) ) {
+
+				$declarations = get_declared_traits();
+				$type_loaded  = 'trait';
+
+			} else {
+				$err_msg = 'Attempt to load %s but it is neither a Class nor a Trait.';
+				Util::log_error( sprintf( $err_msg, $declaration_name, $loaded_class ) );
+			}
+
+			$loaded = array_pop( $declarations );
+
+			if ( $loaded !== $declaration_name ) {
+
+				$err_msg = 'Attempt to load %s %s; %s %s loaded instead.';
+				Util::log_error( sprintf( $err_msg, $type_loaded, $declaration_name, $type_loaded, $loaded ) );
 
 			}
 
-		} else {
+			self::$_class_files[ $declaration_name ] = $filepath;
 
-			$class_file = strtolower( Util::dashify( "/{$class_name}.php" ) );
 
-			if ( is_file( $file_to_load = \WPLib_CLI::get_object_file( $class_name ) ) ) {
-
-				require( $file_to_load );
-
-			} else if ( is_file( $file_to_load = __DIR__ . '/' . basename( $class_file ) ) ) {
-
-				require( $file_to_load );
-
-			}
-
-		}
+		} while ( false );
 
 	}
 
 }
-spl_autoload_register( array( '\WPLib_CLI\AutoLoader', 'autoload' ) );
+spl_autoload_register( array( '\WPLib_CLI\AutoLoader', 'autoload' ), true, true );
 

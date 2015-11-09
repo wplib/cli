@@ -8,14 +8,18 @@ namespace WPLib_CLI {
 	 * @see http://codex.wordpress.org/Function_Reference/register_post_type#rewrite
 	 *
 	 * @property string $slug
-	 * @property bool $with_front
-	 * @property bool $feeds
-	 * @property bool $pages
+	 * @property boolean $with_front
+	 * @property boolean $feeds
+	 * @property boolean $pages
 	 * @property string $ep_mask
 	 *
 	 */
 	class Rewrite extends Object {
 
+		function slug( $slug ) {
+			echo '';
+			return $slug;
+		}
 	}
 
 }

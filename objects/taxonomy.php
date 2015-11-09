@@ -8,35 +8,35 @@ namespace WPLib_CLI {
 	 * Class Taxonomy
 	 *
 	 * @property string $taxonomy                 { @required }
-	 * @property string|string[] $object_type
+	 * @property string|string[] $post_types      { @explode "," }
 	 * @property string $singular
 	 * @property string $description
 	 *
-	 * @property bool $public                     { @initializer
+	 * @property boolean $public                  { @initializer
 	 *                                              @default true
-	 *                                              @wp_default false }
-	 * @property bool $show_ui                    { @initializer
-	 *                                              @wp_default $public }
-	 * @property bool $show_in_nav_menus          { @initializer
-	 *                                              @wp_default $public }
-	 * @property bool $show_tagcloud              { @initializer
-	 *                                              @wp_default $show_ui }
-	 * @property bool $show_in_quick_edit         { @initializer
-	 *                                              @wp_default $public }
+	 *                                              @missing false }
+	 * @property boolean $show_ui                 { @initializer
+	 *                                              @missing $public }
+	 * @property boolean $show_in_nav_menus       { @initializer
+	 *                                              @missing $public }
+	 * @property boolean $show_tagcloud           { @initializer
+	 *                                              @missing $show_ui }
+	 * @property boolean $show_in_quick_edit      { @initializer
+	 *                                              @missing $public }
 	 * @property string $meta_box_cb              { @initializer }
 	 *
-	 * @property bool $show_admin_column          { @initializer
+	 * @property boolean $show_admin_column       { @initializer
 	 *                                              @default true
-	 *                                              @wp_default false }
-	 * @property bool $hierarchical               { @initializer
-	 *                                              @wp_default false }
-	 * @property int $update_count_callback       { @initializer }
-	 * @property bool|string $query_var           { @initializer
-	 *                                              @wp_default $taxonomy }
-	 * @property bool|Rewrite $rewrite            { @initializer
-	 *                                              @wp_default true }
+	 *                                              @missing false }
+	 * @property boolean $hierarchical            { @initializer
+	 *                                              @missing false }
+	 * @property integer $update_count_callback   { @initializer }
+	 * @property boolean|string $query_var        { @initializer
+	 *                                              @missing $taxonomy }
+	 * @property boolean|Rewrite $rewrite         { @initializer
+	 *                                              @missing true }
 	 * @property string|string[] $capabilities    { @initializer }
-	 * @property bool $sort
+	 * @property boolean $sort
 	 *
 	 * @TODO Move these into the traits and allow the parse header to find them.
 	 *
@@ -51,13 +51,17 @@ namespace WPLib_CLI {
 	 */
 	class Taxonomy extends Object {
 
-		use Object_Plural_Trait;
-		use Object_Slugs_Trait;
-		use Object_Query_Var_Trait;
-
 		const SLUG = 'taxonomy';
 
 		const ID_FIELD = 'taxonomy';
+
+		use Object_Plural_Trait;
+		use Object_Slugs_Trait;
+		use Object_Property_Filter_Trait;
+		use Meta_Properties_Trait;
+		use App_Properties_Trait;
+		use Classname_Properties_Trait;
+
 
 		/**
 		 * @param string $singular
@@ -77,16 +81,15 @@ namespace WPLib_CLI {
 		}
 
 		/**
-		 * @param string|string[] $object_type
+		 * @param string|string[] $post_types
 		 *
 		 * @return string
 		 */
-		function object_type( $object_type = null ) {
+		function post_types( $post_types = null ) {
 
-			return Util::comma_string_to_array( $object_type );
+			return Util::comma_string_to_array( $post_types );
 
 		}
-
 
 		/**
 		 * @param null|callable l $value
@@ -95,7 +98,7 @@ namespace WPLib_CLI {
 		 */
 		function update_count_callback( $value = null ) {
 
-			if ( empty( $value ) && in_array( 'attachment', $this->object_type ) ) {
+			if ( empty( $value ) && in_array( 'attachment', $this->post_types ) ) {
 
 				/**
 				 * See register_taxonomy() doc on Codex for why set $update_count_callback
