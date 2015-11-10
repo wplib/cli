@@ -1,5 +1,5 @@
 {
-	"@type": "Root",
+	"@type": "Project",
 	"meta": {
 		"name": "SampleApp",
 		"prefix": "sa",

@@ -1,7 +1,7 @@
 # WPLib CLI
 A command-line scaffolding tool for WPLib
 
-Version 0.1.1
+Version 0.1.2
 
 ##Purpose
 WPLib CLI is intended to be used to generate code to be used with WPLib for fast implementations of WordPress websites that use WPLib.
@@ -13,7 +13,7 @@ There are four (4) different types of `wplib.json` files, only two of which are 
 
 Types|Notes
 ---|---
-**Root**| See [`sample/wplib.json`](sample/wplib.json)
+**Project**| See [`sample/wplib.json`](sample/wplib.json)
 **Site**| See [`sample/www/wplib.json`](sample/www/wplib.json) _This is not used yet._
 **App**| See  [`sample/www/wp-content/mu-plugins/sample-app/wplib.json`](sample/www/wp-content/mu-plugins/sample-app/wplib.json)
 **Theme**| See  [`sample/www/wp-content/themes/sample-app/wplib.json`](sample/www/wp-content/themes/sample-app/wplib.json)  _This is not used yet._

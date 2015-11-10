@@ -53,6 +53,9 @@ namespace WPLib_CLI {
 	 * @property boolean $can_export              { @initializer
 	 *                                              @missing true }
 	 *
+	 * @property string $raw_post_type
+	 * @property string $slug
+	 *
 	 * @TODO Move these into the traits and allow the parse header to find them.
 	 *
 	 * // FROM Object_Plural_Trait
@@ -83,9 +86,30 @@ namespace WPLib_CLI {
 		 */
 		function post_type( $post_type = false ) {
 
-			$post_type = Util::get_prefixed_identifier( $post_type, $this->meta_prefix() );
+			$post_type = Util::prepend_prefix( $post_type, $this->meta_prefix() );
 			return  $post_type;
 
+		}
+
+		/**
+		 * @param boolean|string $post_type
+		 *
+		 * @return string
+		 */
+		function raw_post_type( $post_type = false ) {
+
+			if ( ! $post_type ) {
+				$post_type = $this->post_type;
+			}
+			$post_type = Util::strip_prefix( $post_type, $this->meta_prefix() );
+
+			return  $post_type;
+
+		}
+
+		function slug( $slug ) {
+
+			return $slug ? $slug : Util::dashify( $this->raw_post_type );
 		}
 
 	}

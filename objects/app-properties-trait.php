@@ -19,9 +19,9 @@ namespace WPLib_CLI {
 		/**
 		 * @return null|Object
 		 */
-		function app_root_dir() {
+		function app_project_dir() {
 
-			return $this->get_ancestor( 'app', 'root_dir' );
+			return $this->get_ancestor( 'app', 'project_dir' );
 
 		}
 

@@ -12,7 +12,7 @@ namespace WPLib_CLI {
 	 * @property string $object_type
 	 * @property string $name
 	 * @property string $slug
-	 * @property string $root_dir
+	 * @property string $project_dir
 	 * @property string $prefix
 	 * @property string $text_domain
 	 * @property \WPLib_CLI\Object $object

@@ -89,17 +89,17 @@ namespace WPLib_CLI {
 			/**
 			 * @var Post_Type $post_type
 			 */
-			foreach ( $this->post_types as $post_type => $post_type_object ) {
+			foreach ( $this->post_types as $post_type_object ) {
 
-				$modules[] = "post-type-{$post_type}";
+				$modules[] = "post-type-{$post_type_object->slug}";
 
 			}
 			/**
 			 * @var Taxonomy $taxonomy
 			 */
-			foreach ( $this->taxonomies as $taxonomy => $taxonomy_object ) {
+			foreach ( $this->taxonomies as $taxonomy_object ) {
 
-				$modules[] = "taxonomy-{$taxonomy}";
+				$modules[] = "taxonomy-{$taxonomy_object->slug}";
 
 			}
 

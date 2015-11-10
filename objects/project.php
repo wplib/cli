@@ -5,7 +5,7 @@ namespace WPLib_CLI {
 	use JSON_Loader\Util;
 
 	/**
-	 * Class Root
+	 * Class Project
 	 *
      * @property Meta $meta             { @required }
 	 *
@@ -16,7 +16,7 @@ namespace WPLib_CLI {
 	 * @property Theme|string $theme    { @required
 	 *                                    @loadable }
 	 */
-	class Root extends Object {
+	class Project extends Object {
 
 		const SLUG = 'meta';
 

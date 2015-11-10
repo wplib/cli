@@ -29,7 +29,7 @@ class Autoloader {
 				break;
 			}
 
-			$root_dir = \WPLib_CLI::root_dir();
+			$project_dir = \WPLib_CLI::project_dir();
 
 			$base_name = Util::dashify( $match[1] );
 
@@ -37,7 +37,7 @@ class Autoloader {
 				? 'generators'
 				: 'objects';
 
-			$filepath = "{$root_dir}/{$path}/{$base_name}.php";
+			$filepath = "{$project_dir}/{$path}/{$base_name}.php";
 
 			if ( ! is_file( $filepath ) ) {
 				/*

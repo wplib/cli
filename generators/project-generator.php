@@ -5,16 +5,16 @@ namespace WPLib_CLI {
 	use \JSON_Loader\Util;
 
 	/**
-	 * Class Root_Generator
+	 * Class Project_Generator
 	 *
 	 * @property Meta   $meta
 	 * @property Site   $site
 	 * @property App    $app
 	 * @property Theme  $theme
 	 */
-	class Root_Generator extends Generator {
+	class Project_Generator extends Generator {
 
-		const SLUG = 'root';
+		const SLUG = 'project';
 
 		function register() {
 
@@ -27,7 +27,7 @@ namespace WPLib_CLI {
 		/**
 		 * @return string
 		 */
-		function root_dir() {
+		function project_dir() {
 
 			return $this->object->get_filepath();
 

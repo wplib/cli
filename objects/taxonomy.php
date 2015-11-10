@@ -38,6 +38,9 @@ namespace WPLib_CLI {
 	 * @property string|string[] $capabilities    { @initializer }
 	 * @property boolean $sort
 	 *
+	 * @property string $raw_post_type
+	 * @property string $slug
+	 *
 	 * @TODO Move these into the traits and allow the parse header to find them.
 	 *
 	 * // FROM Object_Plural_Trait
@@ -111,6 +114,47 @@ namespace WPLib_CLI {
 			return $value;
 
 		}
+
+		/**
+		 * @param boolean|string $taxonomy
+		 *
+		 * @return string
+		 */
+		function taxonomy( $taxonomy = false ) {
+
+			$taxonomy = Util::prepend_prefix( $taxonomy, $this->meta_prefix() );
+			return  $taxonomy;
+
+		}
+
+		/**
+		 * @param boolean|string $taxonomy
+		 *
+		 * @return string
+		 */
+		function raw_taxonomy( $taxonomy = false ) {
+
+			if ( ! $taxonomy ) {
+				$taxonomy = $this->taxonomy;
+			}
+
+			$taxonomy = Util::strip_prefix( $taxonomy, $this->meta_prefix() );
+
+			return $taxonomy;
+
+		}
+
+		/**
+		 * @param $slug
+		 *
+		 * @return string
+		 */
+		function slug( $slug ) {
+
+			return $slug ? $slug : Util::dashify( $this->raw_taxonomy );
+		}
+
+
 
 
 	}

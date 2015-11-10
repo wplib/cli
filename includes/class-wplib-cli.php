@@ -32,7 +32,7 @@ class WPLib_CLI {
 	/**
 	 * @return string
 	 */
-    static function root_dir() {
+    static function project_dir() {
 
 		return dirname( __DIR__ );
 
@@ -67,11 +67,11 @@ class WPLib_CLI {
 
 					do {
 
-						$root = $this->load( $json_file, self::$CLASS_FACTORY );
+						$project = $this->load( $json_file, self::$CLASS_FACTORY );
 
-						if ( $this->validate( $root ) ) {
+						if ( $this->validate( $project ) ) {
 
-							$this->generate( $root );
+							$this->generate( $project );
 
 						}
 
@@ -159,7 +159,7 @@ class WPLib_CLI {
 
 			$object_type = property_exists( $data, '@type' )
 					? $data->{'@type'}
-					: '\\WPLib_CLI\\Root';
+					: '\\WPLib_CLI\\Project';
 
 			$object_class = self::get_object_class( $object_type );
 
