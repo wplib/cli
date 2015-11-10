@@ -13,7 +13,7 @@ namespace WPLib_CLI {
 	 * @property string $app_slug
 	 *
 	 * @see Generator_Directory_Trait
-	 * @property string $root_dir
+	 * @property string $project_dir
 	 * @property string $includes_dir
 	 * @property string $modules_dir
 	 * @property string $templates_dir
