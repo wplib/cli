@@ -1,15 +1,15 @@
 <?php
+
 /**
- * @var \WPLib_CLI\Taxonomy_Generator $generator
- * @var \WPLib_CLI\Taxonomy $taxonomy
+ * @var \WPLib_CLI\Generate\Generators\Post_Type $generator
  */
 
 WPLib_CLI::instance()->load_template( 'includes/model-view-item', array(
 
-	'constant_name'       => 'TAXONOMY',
+	'constant_name'       => 'POST_TYPE',
 	'singular_class_name' => $generator->singular_class_name,
 	'plural_class_name'   => $generator->plural_class_name,
-	'base_class'          => 'WPLib_Term_Base',
+	'base_class'          => 'WPLib_Post_Base',
 
 ));
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \WPLib_CLI\App $app
+ * @var \WPLib_CLI\Generate\Objects\App $app
  */
 
 echo <<< TEXT

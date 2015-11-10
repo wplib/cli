@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \WPLib_CLI\Post_Type_Generator $generator
- * @var \WPLib_CLI\Post_Type $post_type
+ * @var \WPLib_CLI\Generate\Generators\Post_Type $generator
+ * @var \WPLib_CLI\Generate\Objects\Post_Type $post_type
  */
 
 echo <<< TEXT

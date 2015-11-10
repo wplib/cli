@@ -1,8 +1,13 @@
 <?php
 
-namespace WPLib_CLI {
+/**
+ * Namespace WPLib_CLI\Generate\Objects
+ */
+namespace WPLib_CLI\Generate\Objects {
 
 	use JSON_Loader\Util;
+	use \WPLib_CLI\Generate\Traits;
+	use \WPLib_CLI\Generate\Base;
 
 	/**
 	 * Class Taxonomy
@@ -38,32 +43,30 @@ namespace WPLib_CLI {
 	 * @property string|string[] $capabilities    { @initializer }
 	 * @property boolean $sort
 	 *
-	 * @property string $raw_post_type
+	 * @property string $raw_taxonomy
 	 * @property string $slug
 	 *
-	 * @TODO Move these into the traits and allow the parse header to find them.
-	 *
-	 * // FROM Object_Plural_Trait
+	 * // FROM Object_Plural
 	 * @property string $plural
 	 *
-	 * // FROM Object_Slugs_Trait
+	 * // FROM Object_Slugs
 	 * @property string $singular_slug
 	 * @property string $plural_slug
 	 *
 	 *
 	 */
-	class Taxonomy extends Object {
+	class Taxonomy extends Base\Object {
 
 		const SLUG = 'taxonomy';
 
 		const ID_FIELD = 'taxonomy';
 
-		use Object_Plural_Trait;
-		use Object_Slugs_Trait;
-		use Object_Property_Filter_Trait;
-		use Meta_Properties_Trait;
-		use App_Properties_Trait;
-		use Classname_Properties_Trait;
+		use Traits\App_Properties;
+		use Traits\Classname_Properties;
+		use Traits\Meta_Properties;
+		use Traits\Object_Plural;
+		use Traits\Object_Property_Filter;
+		use Traits\Object_Slugs;
 
 
 		/**
@@ -145,7 +148,7 @@ namespace WPLib_CLI {
 		}
 
 		/**
-		 * @param $slug
+		 * @param string $slug
 		 *
 		 * @return string
 		 */

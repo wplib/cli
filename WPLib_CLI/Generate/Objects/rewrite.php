@@ -1,6 +1,11 @@
 <?php
 
-namespace WPLib_CLI {
+/**
+ * Namespace WPLib_CLI\Generate\Objects
+ */
+namespace WPLib_CLI\Generate\Objects {
+
+	use WPLib_CLI\Generate\Base;
 
 	/**
 	 * Class Rewrite
@@ -14,12 +19,10 @@ namespace WPLib_CLI {
 	 * @property string $ep_mask
 	 *
 	 */
-	class Rewrite extends Object {
+	class Rewrite extends Base\Object {
 
-		function slug( $slug ) {
-			echo '';
-			return $slug;
-		}
+		const SLUG = 'rewrite';
+
 	}
 
 }

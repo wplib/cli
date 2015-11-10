@@ -1,9 +1,13 @@
 <?php
 
-namespace WPLib_CLI {
+/**
+ * Namespace WPLib_CLI\Generate\Objects
+ */
+namespace WPLib_CLI\Generate\Objects {
 
-	use JSON_Loader\Util;
 	use JSON_Loader\Object_List;
+	use WPLib_CLI\Generate\Base;
+	use WPLib_CLI\Generate\Traits;
 
 	/**
 	 * Class App
@@ -14,11 +18,11 @@ namespace WPLib_CLI {
 	 * @property User_Role[] $user_roles
 	 *
 	 */
-	class App extends Object {
+	class App extends Base\Object {
 
 		const SLUG = 'app';
 
-		use Meta_Properties_Trait;
+		use Traits\Meta_Properties;
 
 		/**
 		 * @param string $singular
@@ -75,14 +79,14 @@ namespace WPLib_CLI {
 		 */
 		function module_list() {
 
-			return new Object_List( $this->modules() );
+			return new Object_List( $this->get_modules() );
 
 		}
 
 		/**
 		 * @return string[]
 		 */
-		function modules() {
+		private function get_modules() {
 
 			$modules = array();
 
@@ -91,7 +95,10 @@ namespace WPLib_CLI {
 			 */
 			foreach ( $this->post_types as $post_type_object ) {
 
-				$modules[] = "post-type-{$post_type_object->slug}";
+				$modules[] = new Base\Module( array(
+					"slug" => "post-type-{$post_type_object->slug}",
+					"object" => $post_type_object,
+				), $this );
 
 			}
 			/**
@@ -99,7 +106,10 @@ namespace WPLib_CLI {
 			 */
 			foreach ( $this->taxonomies as $taxonomy_object ) {
 
-				$modules[] = "taxonomy-{$taxonomy_object->slug}";
+				$modules[] = new Base\Module( array(
+					"slug" => "taxonomy-{$taxonomy_object->slug}",
+					"object" => $taxonomy_object,
+				), $this );
 
 			}
 
