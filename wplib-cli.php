@@ -3,7 +3,7 @@
  * Name:        WPLib CLI
  * URL:         http://github.com/wplib/wplib-cli
  * Description: A command-line scaffolding tool for WPLib
- * Version:     0.1.1
+ * Version:     0.1.2
  * Author:      The WPLib Team
  * Author URI:  http://wplib.org
  * License:     GPLv2 or later
