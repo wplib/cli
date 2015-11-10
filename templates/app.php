@@ -1,20 +1,25 @@
 <?php
-
-$class_name = $app->name;
+/**
+ * @var \WPLib_CLI\App $app
+ */
 
 echo <<< TEXT
 <?php
 /**
- * Class {$class_name}
+ * Class {$app->singular}
  */
-class {$class_name} extends WPLib_App_Base {
+class {$app->singular} extends WPLib_App_Base {
 
 	static function on_load() {
 
-		[@include(hook-comments)]
+		{$app->module_list()->implode( function( $module ) {
 
+			return "self::register_module( '{$module}' );\n\t\t";
+
+		})}
+		[@include(hook-comments)]
 	}
 
 }
-{$class_name}::on_load();
+{$app->singular}::on_load();
 TEXT;

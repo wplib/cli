@@ -1,7 +1,7 @@
 # WPLib CLI
 A command-line scaffolding tool for WPLib
 
-Version 0.1.0
+Version 0.1.1
 
 ##Purpose
 WPLib CLI is intended to be used to generate code to be used with WPLib for fast implementations of WordPress websites that use WPLib.
