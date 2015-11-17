@@ -6,8 +6,8 @@
 namespace WPLib_CLI\Generate\Objects {
 
 	use JSON_Loader\Object_List;
-	use WPLib_CLI\Generate\Base;
-	use WPLib_CLI\Generate\Traits;
+	use WPLib_CLI\generate\Base;
+	use WPLib_CLI\generate\Traits;
 
 	/**
 	 * Class App
@@ -77,7 +77,7 @@ namespace WPLib_CLI\Generate\Objects {
 		/**
 		 * @return Object_List
 		 */
-		function module_list() {
+		function get_module_list() {
 
 			return new Object_List( $this->get_modules() );
 

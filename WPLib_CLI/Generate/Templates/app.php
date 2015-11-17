@@ -12,7 +12,7 @@ class {$app->singular} extends WPLib_App_Base {
 
 	static function on_load() {
 
-		{$app->module_list()->implode( function( $module ) {
+		{$app->get_module_list()->implode( function( $module ) {
 
 			return "self::register_module( '{$module}' );\n\t\t";
 
