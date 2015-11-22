@@ -4,7 +4,7 @@
  */
 namespace WPLib_CLI {
 
-	use JSON_Loader\Util;
+	use JsonLoader\Util;
 
 	/**
 	 * Class Classname_Properties_Trait

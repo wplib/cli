@@ -4,7 +4,7 @@
  */
 namespace WPLib_CLI {
 
-	use JSON_Loader\Util;
+	use JsonLoader\Util;
 
 	/**
 	 * Class Module_Directories_Generator_Trait

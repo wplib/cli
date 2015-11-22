@@ -4,14 +4,14 @@
  */
 namespace WPLib_CLI {
 
-	use JSON_Loader\Util;
+	use JsonLoader\Util;
 
 	/**
 	 * Trait App_Properties_Trait
 	 *
 	 * @package WPLib_CLI
 	 *
-	 * @mixin \JSON_Loader\Object
+	 * @mixin \JsonLoader\Object
 	 *
 	 */
 	trait App_Properties_Trait {

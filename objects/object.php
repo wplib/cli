@@ -2,14 +2,14 @@
 
 namespace WPLib_CLI {
 
-	use \JSON_Loader;
+	use \JsonLoader;
 
 	/**
 	 * Class Object
 	 *
 	 * @property Meta $meta
 	 */
-	class Object extends JSON_Loader\Object {
+	class Object extends JsonLoader\Object {
 
 		const SLUG = 'object';
 

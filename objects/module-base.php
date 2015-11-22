@@ -2,7 +2,7 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader;
+	use JsonLoader;
 
 	/**
 	 * Class App

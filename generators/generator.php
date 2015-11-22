@@ -2,9 +2,9 @@
 
 namespace WPLib_CLI {
 
-	use \JSON_Loader;
-	use \JSON_Loader\Property;
-	use \JSON_Loader\Util;
+	use \JsonLoader;
+	use \JsonLoader\Property;
+	use \JsonLoader\Util;
 
 	/**
 	 * Class Generator
@@ -17,7 +17,7 @@ namespace WPLib_CLI {
 	 * @property string $text_domain
 	 * @property \WPLib_CLI\Object $object
 	 */
-	abstract class Generator extends \JSON_Loader\Generator {
+	abstract class Generator extends \JsonLoader\Generator {
 
 		/**
 		 * Stub method so child can safely call its object_parent

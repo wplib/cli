@@ -1,10 +1,10 @@
 <?php
 
-use JSON_Loader\Loader;
-use JSON_Loader\Validator;
-use JSON_Loader\Generator;
-use JSON_Loader\Output;
-use JSON_Loader\Util;
+use JsonLoader\Loader;
+use JsonLoader\Validator;
+use JsonLoader\Generator;
+use JsonLoader\Output;
+use JsonLoader\Util;
 
 /**
  * Class WPLib_CLI
@@ -103,9 +103,10 @@ class WPLib_CLI {
 	 * @param string $filepath
 	 * @param callable $class_factory
 	 * @param array $args {
-     *      @type boolean|\JSON_Loader\Logger $logger
+     *
+*@type boolean|\JsonLoader\Logger $logger
 	 * }
-	 * @return \JSON_Loader\Object
+	 * @return \JsonLoader\Object
 	 */
 	function load( $filepath, $class_factory, $args = array() ) {
 
@@ -116,9 +117,10 @@ class WPLib_CLI {
 	}
 
 	/**
-	 * @param \JSON_Loader\Object $object
+	 * @param \JsonLoader\Object $object
 	 * @param array $args
-	 * @return \JSON_Loader\Object
+	 *
+*@return \JsonLoader\Object
 	 */
 	function validate( $object, $args = array() ) {
 
@@ -127,8 +129,9 @@ class WPLib_CLI {
 	}
 
 	/**
-	 * @param \JSON_Loader\Object $object
-	 * @return \JSON_Loader\Object
+	 * @param \JsonLoader\Object $object
+	 *
+*@return \JsonLoader\Object
 	 */
 	function generate( $object ) {
 
@@ -144,7 +147,7 @@ class WPLib_CLI {
 	 * @param array $args {
 	 *      @type Object|boolean $parent
 	 * }
-	 * @return \JSON_Loader\Object
+	 * @return \JsonLoader\Object
 	 */
 	static function make_new( $data, $filepath, $args ) {
 
@@ -175,7 +178,7 @@ class WPLib_CLI {
 				'filepath' => dirname( $filepath ),
 			));
 
-			if ( ! $object instanceof \JSON_Loader\Object ) {
+			if ( ! $object instanceof \JsonLoader\Object ) {
 				$err_msg = "@type=%s from wplib.json is not an instance of \\JSON_Loader\\Object.";
 				break;
 			}

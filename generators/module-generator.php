@@ -2,8 +2,8 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader\Property;
-	use JSON_Loader\Util;
+	use JsonLoader\Property;
+	use JsonLoader\Util;
 
 	/**
 	 * Class Module_Generator

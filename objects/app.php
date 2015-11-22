@@ -2,8 +2,8 @@
 
 namespace WPLib_CLI {
 
-	use JSON_Loader\Util;
-	use JSON_Loader\Object_List;
+	use JsonLoader\Util;
+	use JsonLoader\Object_List;
 
 	/**
 	 * Class App

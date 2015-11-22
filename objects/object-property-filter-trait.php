@@ -4,7 +4,7 @@
  */
 namespace WPLib_CLI {
 
-	use JSON_Loader\Util;
+	use JsonLoader\Util;
 
 	/**
 	 * Trait Object_Property_Filter_Trait
@@ -14,15 +14,15 @@ namespace WPLib_CLI {
 	 *
 	 * @package WPLib_CLI
 	 *
-	 * @mixin \JSON_Loader\Object
+	 * @mixin \JsonLoader\Object
 	 *
 	 */
 	trait Object_Property_Filter_Trait {
 
 		/**
 		 * @param mixed $value
-		 * @param \JSON_Loader\Property $property
 		 * @return mixed
+		 * @param \JsonLoader\Property $property
 		 */
 		function _property_filter_( $value, $property ) {
 
@@ -38,8 +38,8 @@ namespace WPLib_CLI {
 
 		/**
 		 * @param mixed $value
-		 * @param \JSON_Loader\Property $property
 		 * @return mixed
+		 * @param \JsonLoader\Property $property
 		 */
 		private function _filter_missing_( $value, $property ) {
 
