@@ -23,7 +23,7 @@ class WPLib_CLI {
 	/**
 	 * @return self
 	 */
-    static function instance() {
+    static function get_instance() {
 
 		return self::$instance;
 
@@ -221,7 +221,7 @@ class WPLib_CLI {
 				/*
 				 * Now load everything that referenced and not included.
 				 */
-				$value = self::instance()->load( $child_filepath, static::$CLASS_FACTORY, array(
+				$value = self::get_instance()->load( $child_filepath, static::$CLASS_FACTORY, array(
 					'parent'   => $object,
 					'filepath' => dirname( $child_filepath ),
 				));
