@@ -21,7 +21,6 @@ class {$post_type->plural_class_name} extends WPLib_Post_Module_Base {
 		));
 
 		self::register_post_type( array(
-			'post_type' => static::POST_TYPE,
 			'labels'    => \$labels,
 			{$generator->php_initializers()}
 		));
