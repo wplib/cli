@@ -45,6 +45,8 @@ class WPLib_CLI {
 
 		echo "\n";
 
+		$this->show_banner();
+
 		do {
 
 			if ( 1 == count( $args ) ) {
@@ -238,6 +240,23 @@ class WPLib_CLI {
 		}
 
 		return $object;
+
+	}
+
+	/**
+	 *
+	 */
+	function show_banner() {
+
+		echo <<<ASCII_ART
+__      _____ _    _ _       ___ _    ___
+\ \    / / _ \ |  (_) |__   / __| |  |_ _|
+ \ \/\/ /|  _/ |__| | '_ \ | (__| |__ | |
+  \_/\_/ |_| |____|_|_.__/  \___|____|___|
+
+    Copyright 2015 The WPLib Team
+
+ASCII_ART;
 
 	}
 
