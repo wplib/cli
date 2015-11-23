@@ -181,7 +181,7 @@ class WPLib_CLI {
 			));
 
 			if ( ! $object instanceof \JsonLoader\Object ) {
-				$err_msg = "@type=%s from wplib.json is not an instance of \\JSON_Loader\\Object.";
+				$err_msg = "@type=%s from wplib.json is not an instance of \\JsonLoader\\Object.";
 				break;
 			}
 
