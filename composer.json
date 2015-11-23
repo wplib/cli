@@ -1,0 +1,37 @@
+{
+
+	"name": "wplib/wplib",
+	"type": "library",
+	"description": "An MV* Foundation Library for Building Custom WordPress Sites",
+	"keywords": [ "wordpress", "php", "cli", "wplib", "scaffolding", "console" ],
+	"homepage": "http://github.com/wplib/wplib-cli",
+ 	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "The WPLib Team",
+			"email": "team@wplib.org",
+			"homepage" : "http://wplib.org",
+			"role" :  "Supporting Organization"
+		},
+		{
+			"name": "Mike Schinkel",
+			"email": "mike@newclarity.net",
+			"homepage" : "http://about.me/mikeschinkel",
+			"role" :  "Architect and Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"wplib/json-loader": "0.1.x"
+	},
+	"autoload": {
+		"psr-0": { "WPLib_CLI\\": "includes/" }
+	},
+	"support": {
+		"email": "support@wplib.org",
+		"issues": "https://github.com/wplib/wplib-cli/issues",
+		"forum": "https://wplib.slack.com/",
+		"source":"https://github.com/wplib/wplib-cli",
+		"docs": "http://wplib.org"
+	}
+}
